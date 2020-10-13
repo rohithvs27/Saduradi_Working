@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/Users/rohith/AndroidStudioProjects/Saduradi_Dev-master/build/path_provider/intermediates/res/merged/release/layout-v21/notification_action.xml",
+        "source": "/Users/rohith/.gradle/caches/transforms-2/files-2.1/cc05cbb20248c793dee14f7d6605fdfb/core-1.1.0/res/layout-v21/notification_action.xml"
+    },
+    {
+        "merged": "/Users/rohith/AndroidStudioProjects/Saduradi_Dev-master/build/path_provider/intermediates/res/merged/release/layout-v21/notification_template_custom_big.xml",
+        "source": "/Users/rohith/.gradle/caches/transforms-2/files-2.1/cc05cbb20248c793dee14f7d6605fdfb/core-1.1.0/res/layout-v21/notification_template_custom_big.xml"
+    },
+    {
+        "merged": "/Users/rohith/AndroidStudioProjects/Saduradi_Dev-master/build/path_provider/intermediates/res/merged/release/layout-v21/notification_action_tombstone.xml",
+        "source": "/Users/rohith/.gradle/caches/transforms-2/files-2.1/cc05cbb20248c793dee14f7d6605fdfb/core-1.1.0/res/layout-v21/notification_action_tombstone.xml"
+    },
+    {
+        "merged": "/Users/rohith/AndroidStudioProjects/Saduradi_Dev-master/build/path_provider/intermediates/res/merged/release/layout-v21/notification_template_icon_group.xml",
+        "source": "/Users/rohith/.gradle/caches/transforms-2/files-2.1/cc05cbb20248c793dee14f7d6605fdfb/core-1.1.0/res/layout-v21/notification_template_icon_group.xml"
+    }
+]

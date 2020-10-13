@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "/Users/rohith/AndroidStudioProjects/Saduradi_Dev-master/build/firebase_core/intermediates/res/merged/release/color/common_google_signin_btn_text_dark.xml",
+        "source": "/Users/rohith/.gradle/caches/transforms-2/files-2.1/8f8d368634a7c04bb9d37aa46a7c9cae/play-services-base-17.0.0/res/color/common_google_signin_btn_text_dark.xml"
+    },
+    {
+        "merged": "/Users/rohith/AndroidStudioProjects/Saduradi_Dev-master/build/firebase_core/intermediates/res/merged/release/color/common_google_signin_btn_text_light.xml",
+        "source": "/Users/rohith/.gradle/caches/transforms-2/files-2.1/8f8d368634a7c04bb9d37aa46a7c9cae/play-services-base-17.0.0/res/color/common_google_signin_btn_text_light.xml"
+    },
+    {
+        "merged": "/Users/rohith/AndroidStudioProjects/Saduradi_Dev-master/build/firebase_core/intermediates/res/merged/release/color/common_google_signin_btn_tint.xml",
+        "source": "/Users/rohith/.gradle/caches/transforms-2/files-2.1/8f8d368634a7c04bb9d37aa46a7c9cae/play-services-base-17.0.0/res/color/common_google_signin_btn_tint.xml"
+    }
+]

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "435892193278",
+    "firebase_url": "https://crud-firebase-demo-a08da.firebaseio.com",
+    "project_id": "crud-firebase-demo-a08da",
+    "storage_bucket": "crud-firebase-demo-a08da.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:435892193278:android:0b297727b8c76a1783e2af",
+        "android_client_info": {
+          "package_name": "com.example.saduradi_phone_signin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "435892193278-khqibijq79aeeulv3ia966hfl8ldf5av.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.saduradi_phone_signin",
+            "certificate_hash": "e333a19c1da98f1cb7d7f17a834cc6c366452feb"
+          }
+        },
+        {
+          "client_id": "435892193278-vld6li1m2p8eicfcplaqb9cqnnne146e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHijya2r-vBEuXsamTP6qa3AR1FXOhz5E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "435892193278-vld6li1m2p8eicfcplaqb9cqnnne146e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
