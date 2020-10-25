@@ -3,19 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:saduradi_phone_signin/plotnames.dart';
 import 'package:saduradi_phone_signin/services/filterdata.dart';
 import 'package:saduradi_phone_signin/widgets/Appbar.dart';
+import 'package:saduradi_phone_signin/widgets/createnewemp.dart';
 
 var promotor_name = "Loading...";
 var plotcount;
 
 class MyHomePage extends StatefulWidget {
+  final bool admin;
   final String uid;
-  MyHomePage(this.uid);
+  final String promotorName;
+  final String empname;
+  MyHomePage(this.promotorName, this.uid, this.admin, this.empname);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  int _cIndex = 0;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _projectnamecontroller = TextEditingController();
   GetPlotFilterCount getCount = new GetPlotFilterCount();
@@ -40,10 +45,16 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _incrementTab(index) {
+    setState(() {
+      _cIndex = index;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    get_promotorName();
+    //get_promotorName();
     controller.addListener(() {
       setState(() {
         closeTopContainer = controller.offset > 50;
@@ -55,73 +66,166 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return SafeArea(
-      child: Scaffold(
-        appBar: customAppbar(context, promotor_name),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: const Color(0xff03dac6),
-          foregroundColor: Colors.black,
-          onPressed: () {
-            setState(() {
-              addnewproject();
-              _projectnamecontroller.clear();
-            });
-          },
-          child: Icon(Icons.add),
-        ),
-        body: Container(
-          color: Colors.grey[300],
-          height: size.height,
-          child: Column(children: <Widget>[
-            Expanded(
-                child: StreamBuilder(
-              stream: getPromoterProjectStreamSnapshots(context),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData)
-                  return const AlertDialog(
-                    backgroundColor: Colors.transparent,
-                    content: Text(
-                      "Loading...",
-                      textAlign: TextAlign.center,
-                    ),
-                  );
-                return new ListView.builder(
-                    physics: BouncingScrollPhysics(),
-                    itemCount: snapshot.data.documents.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        height: 80,
-                        child: Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.0),
-                            ),
-                            shadowColor: Colors.black,
-                            elevation: 5,
-                            child: ListTile(
-                              contentPadding:
-                                  EdgeInsets.only(left: 20, top: 10),
-                              title: Text(
-                                snapshot.data.documents[index].id.toString(),
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 20),
-                              ),
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    new MaterialPageRoute(
-                                        builder: (context) => PlotNames(
-                                              widget.uid,
-                                              snapshot.data.documents[index].id,
-                                            )));
-                              },
-                            )),
-                      );
+        child: widget.admin
+            ? Scaffold(
+                appBar: customAppbar(context, widget.promotorName),
+                floatingActionButton: FloatingActionButton(
+                  tooltip: "Add Project",
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.red[900],
+                  onPressed: () {
+                    setState(() {
+                      addnewproject();
+                      _projectnamecontroller.clear();
                     });
-              },
-            )),
-          ]),
-        ),
-      ),
-    );
+                  },
+                  child: Icon(Icons.add),
+                ),
+                bottomNavigationBar: widget.admin
+                    ? BottomNavigationBar(
+                        backgroundColor: Colors.blueAccent,
+                        currentIndex: _cIndex,
+                        items: const <BottomNavigationBarItem>[
+                          BottomNavigationBarItem(
+                              icon: Icon(Icons.business),
+                              title: Text("Add Project")),
+                          BottomNavigationBarItem(
+                              icon: Icon(Icons.person_add),
+                              title: Text("Add Employee")),
+                        ],
+                        selectedItemColor: Colors.amber[800],
+                        onTap: (index) {
+                          _incrementTab(index);
+                          Navigator.push(
+                              context,
+                              new MaterialPageRoute(
+                                  builder: (context) =>
+                                      CreateNewEmp(widget.promotorName)));
+                        },
+                      )
+                    : Container(),
+                body: Container(
+                  color: Colors.white,
+                  height: size.height,
+                  child: Column(children: <Widget>[
+                    Expanded(
+                        child: StreamBuilder(
+                      stream: getPromoterProjectStreamSnapshots(context),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData)
+                          return const AlertDialog(
+                            backgroundColor: Colors.transparent,
+                            content: Text(
+                              "Loading...",
+                              textAlign: TextAlign.center,
+                            ),
+                          );
+                        return new ListView.builder(
+                            physics: BouncingScrollPhysics(),
+                            itemCount: snapshot.data.documents.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              print(snapshot.data.documents[index].id);
+                              return Container(
+                                height: 75,
+                                child: Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15.0),
+                                    ),
+                                    shadowColor: Colors.black,
+                                    color: Colors.grey[200],
+                                    elevation: 5,
+                                    child: ListTile(
+                                      contentPadding:
+                                          EdgeInsets.only(left: 20, top: 5),
+                                      title: Text(
+                                        snapshot.data.documents[index].id
+                                            .toString(),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20),
+                                      ),
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            new MaterialPageRoute(
+                                                builder: (context) => PlotNames(
+                                                    widget.promotorName,
+                                                    widget.uid,
+                                                    snapshot.data
+                                                        .documents[index].id,
+                                                    widget.admin,
+                                                    widget.empname)));
+                                      },
+                                    )),
+                              );
+                            });
+                      },
+                    )),
+                  ]),
+                ),
+              )
+            : Scaffold(
+                appBar: customAppbar(context, widget.promotorName),
+                body: Container(
+                  color: Colors.white,
+                  height: size.height,
+                  child: Column(children: <Widget>[
+                    Expanded(
+                        child: StreamBuilder(
+                      stream: getPromoterProjectStreamSnapshots(context),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData)
+                          return const AlertDialog(
+                            backgroundColor: Colors.transparent,
+                            content: Text(
+                              "Loading...",
+                              textAlign: TextAlign.center,
+                            ),
+                          );
+                        return new ListView.builder(
+                            physics: BouncingScrollPhysics(),
+                            itemCount: snapshot.data.documents.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              print(snapshot.data.documents[index].id);
+                              return Container(
+                                height: 75,
+                                child: Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15.0),
+                                    ),
+                                    shadowColor: Colors.black,
+                                    color: Colors.grey[200],
+                                    elevation: 5,
+                                    child: ListTile(
+                                      contentPadding:
+                                          EdgeInsets.only(left: 20, top: 5),
+                                      title: Text(
+                                        snapshot.data.documents[index].id
+                                            .toString(),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20),
+                                      ),
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            new MaterialPageRoute(
+                                                builder: (context) => PlotNames(
+                                                    widget.promotorName,
+                                                    widget.uid,
+                                                    snapshot.data
+                                                        .documents[index].id,
+                                                    widget.admin,
+                                                    widget.empname)));
+                                      },
+                                    )),
+                              );
+                            });
+                      },
+                    )),
+                  ]),
+                ),
+              ));
   }
 
   addnewproject() {
@@ -140,7 +244,9 @@ class _MyHomePageState extends State<MyHomePage> {
                           Text(
                             "Add New Project",
                             style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           Form(
                               key: _formKey,
@@ -167,11 +273,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 FlatButton(
                   color: Colors.green,
                   child: Text('Submit'),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                  ),
                   onPressed: () {
                     DocumentReference docref = FirebaseFirestore.instance
-                        .collection('data')
-                        .doc(widget.uid)
-                        .collection("projects")
+                        .collection(widget.promotorName)
+                        .doc("Projects")
+                        .collection("projectlist")
                         .doc(_projectnamecontroller.text.trim());
 
                     docref.set(
@@ -186,9 +295,9 @@ class _MyHomePageState extends State<MyHomePage> {
   Stream<QuerySnapshot> getPromoterProjectStreamSnapshots(
       BuildContext context) async* {
     yield* FirebaseFirestore.instance
-        .collection('data')
-        .doc(widget.uid)
-        .collection("projects")
+        .collection(widget.promotorName)
+        .doc("Projects")
+        .collection("projectlist")
         .snapshots();
   }
 }

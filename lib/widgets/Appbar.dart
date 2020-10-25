@@ -12,6 +12,8 @@ Widget customAppbar(context, name) {
     await _auth.signOut();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('uid');
+    prefs.remove('admin');
+    prefs.remove('promotorname');
     Navigator.pushAndRemoveUntil(
         context,
         new MaterialPageRoute(builder: (context) => SignInPage()),
@@ -20,13 +22,13 @@ Widget customAppbar(context, name) {
 
   return AppBar(
     centerTitle: true,
-    backgroundColor: Color(0xff03dac6),
+    backgroundColor: Colors.white,
     title: Text(
       name.toString(),
       textAlign: TextAlign.center,
       style: GoogleFonts.poppins(
           textStyle: Theme.of(context).textTheme.headline4,
-          color: Colors.black,
+          color: Colors.red[900],
           fontSize: 25,
           fontWeight: FontWeight.w700,
           fontStyle: FontStyle.normal),

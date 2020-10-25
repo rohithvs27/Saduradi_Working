@@ -1,18 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:saduradi_phone_signin/widgets/showbuyerinfoalert.dart';
 import 'package:saduradi_phone_signin/widgets/Appbar.dart';
 
-Map<String, dynamic> docs;
 bool booked;
 Color available;
 Color showinfo = Colors.black;
 
 class PlotNames extends StatefulWidget {
+  final String promotorName;
   final String uid;
   final String doc_id;
+  final bool admin;
+  final String empname;
 
-  PlotNames(this.uid, this.doc_id);
+  PlotNames(this.promotorName, this.uid, this.doc_id, this.admin, this.empname);
 
   @override
   _PlotNamesState createState() => _PlotNamesState();
@@ -23,6 +25,18 @@ class _PlotNamesState extends State<PlotNames> {
   final _buyernamecontroller = TextEditingController();
   final _phonenumbercontroller = TextEditingController();
   final _brokernamecontroller = TextEditingController();
+  final _addplotscontroller = TextEditingController();
+  final _areainputcontroller = TextEditingController();
+  final _directionFacingcontroller = TextEditingController();
+  final _editareacontroller = TextEditingController();
+  final _bookingAmountcontroller = TextEditingController();
+
+  int range = 1;
+  int doclength;
+  String area = "1000";
+  String editarea;
+  String editdireaction;
+  var directionVal = "NW";
 
   @override
   void initState() {
@@ -34,316 +48,680 @@ class _PlotNamesState extends State<PlotNames> {
     final Size size = MediaQuery.of(context).size;
     //final double containerheight = size.height * 0.12;
     return SafeArea(
-        child: Scaffold(
-      backgroundColor: Colors.white,
-      appBar: customAppbar(context, widget.doc_id.toString()),
-      floatingActionButton: FloatingActionButton(
-        tooltip: "Add",
-        backgroundColor: const Color(0xff03dac6),
-        foregroundColor: Colors.black,
-        onPressed: () {
-          setState(() {
-            addplotcount();
-          });
-        },
-        child: Icon(Icons.add),
-      ),
-      body: Container(
-        color: Colors.grey[300],
-        height: size.height,
-        child: Column(children: <Widget>[
-          Expanded(
-            child: StreamBuilder(
-              stream: getProjectPlotsStreamSnapshots(context),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData)
-                  return const AlertDialog(
-                    backgroundColor: Colors.transparent,
-                    content: Text(
-                      "Loading...",
-                      textAlign: TextAlign.center,
-                    ),
-                  );
-                return new ListView.builder(
-                    physics: BouncingScrollPhysics(),
-                    itemCount: snapshot.data.documents.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      booked =
-                          snapshot.data.documents[index].data()['isbooked'];
-                      available =
-                          snapshot.data.documents[index].data()['isbooked']
-                              ? Colors.red
-                              : Colors.green;
-                      bool registrationComplete = !snapshot
-                          .data.documents[index]
-                          .data()['registrationComplete'];
+        child: widget.admin
+            ? Scaffold(
+                backgroundColor: Colors.white,
+                appBar: customAppbar(context, widget.doc_id.toString()),
+                floatingActionButton: FloatingActionButton(
+                  tooltip: "Add Plots",
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.red[900],
+                  onPressed: () {
+                    setState(() {
+                      _addplotcount();
+                    });
+                  },
+                  child: Icon(Icons.add),
+                ),
+                body: Container(
+                  color: Colors.grey[300],
+                  height: size.height,
+                  child: Column(children: <Widget>[
+                    Expanded(
+                      child: StreamBuilder(
+                        stream: getProjectPlotsStreamSnapshots(context),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData)
+                            return const AlertDialog(
+                              backgroundColor: Colors.transparent,
+                              content: Text(
+                                "Loading...",
+                                textAlign: TextAlign.center,
+                              ),
+                            );
+                          return new ListView.builder(
+                              physics: BouncingScrollPhysics(),
+                              itemCount: snapshot.data.documents.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                booked = snapshot.data.documents[index]
+                                    .data()['isbooked'];
+                                available = snapshot.data.documents[index]
+                                        .data()['isbooked']
+                                    ? Colors.red
+                                    : Colors.green;
+                                bool registrationComplete = !snapshot
+                                    .data.documents[index]
+                                    .data()['registrationComplete'];
 
-                      return Container(
-                          height: 80,
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.0),
-                            ),
-                            elevation: 9,
-                            shadowColor: Colors.black,
-                            child: Column(
-                              children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    Container(
-                                      width: size.width * 0.7,
-                                      child: ListTile(
-                                        leading: Container(
-                                          width: 50,
-                                          height: 50,
-                                          decoration: BoxDecoration(
-                                            border: Border.all(width: 2),
-                                            shape: BoxShape.circle,
-                                            // You can use like this way or like the below line
-                                            //borderRadius: new BorderRadius.circular(30.0),
-                                            color: Colors.amberAccent,
-                                          ),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
+                                return Container(
+                                    height: 90,
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(15.0),
+                                      ),
+                                      elevation: 9,
+                                      shadowColor: Colors.black,
+                                      child: Column(
+                                        children: <Widget>[
+                                          Row(
                                             children: <Widget>[
-                                              Text(
-                                                snapshot.data.documents[index]
-                                                    .data()['plotname']
-                                                    .toString(),
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 20),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        title: Text(
-                                          booked
-                                              ? snapshot.data.documents[index]
-                                                  .data()['buyername']
-                                              : "Available",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        subtitle: Text(booked
-                                            ? snapshot.data.documents[index]
-                                                .data()['buyerphonenumber']
-                                            : snapshot.data.documents[index]
-                                                .data()['area']),
-                                        onTap: () {
-                                          snapshot.data.documents[index]
-                                                  .data()["isbooked"]
-                                              ? showDialog(
-                                                  context: context,
-                                                  builder: (_) => AlertDialog(
-                                                    content:
-                                                        _showbuyerinfoalert(
+                                              Container(
+                                                width: size.width * 0.7,
+                                                child: ListTile(
+                                                  contentPadding:
+                                                      EdgeInsets.only(
+                                                          top: 3, left: 15),
+                                                  leading: Container(
+                                                    width: 50,
+                                                    height: 50,
+                                                    decoration: BoxDecoration(
+                                                      border:
+                                                          Border.all(width: 2),
+                                                      shape: BoxShape.circle,
+                                                      // You can use like this way or like the below line
+                                                      //borderRadius: new BorderRadius.circular(30.0),
+                                                    ),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: <Widget>[
+                                                        Text(
+                                                          snapshot.data
+                                                              .documents[index]
+                                                              .data()[
+                                                                  'plotname']
+                                                              .toString(),
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 20,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  title:
+                                                      Text(
+                                                          booked
+                                                              ? snapshot
+                                                                      .data
+                                                                      .documents[
+                                                                          index]
+                                                                      .data()[
+                                                                  'buyername']
+                                                              : "Available",
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          )),
+                                                  subtitle: Text(
+                                                      booked
+                                                          ? snapshot.data
+                                                                  .documents[index]
+                                                                  .data()[
+                                                              'buyerphonenumber']
+                                                          : "${snapshot.data.documents[index].data()['directionFacing']} - ${snapshot.data.documents[index].data()['area']} sq.ft ",
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      )),
+                                                  onTap: () {
+                                                    snapshot.data
+                                                            .documents[index]
+                                                            .data()["isbooked"]
+                                                        ? showDialog(
+                                                            context: context,
+                                                            builder: (_) =>
+                                                                AlertDialog(
+                                                              content: showbuyerinfoalert(
+                                                                  snapshot
+                                                                      .data
+                                                                      .documents[
+                                                                          index]
+                                                                      .data()),
+                                                              actions: <Widget>[
+                                                                registrationComplete
+                                                                    //button to confirm registration
+                                                                    ? FlatButton(
+                                                                        shape:
+                                                                            RoundedRectangleBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(18.0),
+                                                                        ),
+                                                                        color: Colors
+                                                                            .green,
+                                                                        child: Text(
+                                                                            'Submit'),
+                                                                        onPressed:
+                                                                            () async {
+                                                                          showDialog(
+                                                                              context: context,
+                                                                              builder: (_) => AlertDialog(
+                                                                                      title: Text("Registration Confirmation"),
+                                                                                      content: SingleChildScrollView(
+                                                                                        child: Text("Are you sure registration is complete?"),
+                                                                                      ),
+                                                                                      actions: <Widget>[
+                                                                                        FlatButton(
+                                                                                          shape: RoundedRectangleBorder(
+                                                                                            borderRadius: BorderRadius.circular(18.0),
+                                                                                          ),
+                                                                                          color: Colors.green,
+                                                                                          child: Text("Yes"),
+                                                                                          onPressed: () {
+                                                                                            var plot_docid = snapshot.data.documents[index].id;
+
+                                                                                            DocumentReference documentReference = FirebaseFirestore.instance.collection(widget.promotorName).doc("Projects").collection("projectlist").doc(widget.doc_id).collection("plots").doc(plot_docid);
+                                                                                            documentReference.update({
+                                                                                              "registrationComplete": true
+                                                                                            });
+                                                                                            Navigator.of(context).pop();
+                                                                                            Navigator.of(context).pop();
+                                                                                          },
+                                                                                        )
+                                                                                      ]));
+                                                                        },
+                                                                      )
+                                                                    : Container(
+                                                                        alignment:
+                                                                            Alignment
+                                                                                .center,
+                                                                        padding:
+                                                                            EdgeInsets.all(
+                                                                                20),
+                                                                        child:
+                                                                            Text(
+                                                                          "Property Registered",
+                                                                          style: TextStyle(
+                                                                              fontSize: 20,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              color: Colors.red),
+                                                                        )),
+                                                              ],
+                                                            ),
+                                                          )
+                                                        : editplotdetails(
                                                             snapshot
                                                                 .data
                                                                 .documents[
                                                                     index]
-                                                                .data()),
-                                                    actions: <Widget>[
-                                                      registrationComplete
-                                                          //button to confirm registration
-                                                          ? FlatButton(
-                                                              shape:
-                                                                  RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            18.0),
-                                                              ),
+                                                                .data(),
+                                                            snapshot
+                                                                .data
+                                                                .documents[
+                                                                    index]
+                                                                .id);
+                                                  },
+                                                ),
+                                              ),
+                                              Container(
+                                                  width: size.width * 0.24,
+                                                  child: !registrationComplete
+                                                      ? Text(
+                                                          "Property Registered",
+                                                          style: TextStyle(
                                                               color:
-                                                                  Colors.green,
-                                                              child: Text(
-                                                                  'Submit'),
-                                                              onPressed:
-                                                                  () async {
-                                                                showDialog(
-                                                                    context:
-                                                                        context,
-                                                                    builder: (_) =>
-                                                                        AlertDialog(
-                                                                            title:
-                                                                                Text("Registration Confirmation"),
-                                                                            content: SingleChildScrollView(
-                                                                              child: Text("Are you sure registration is complete?"),
-                                                                            ),
-                                                                            actions: <Widget>[
-                                                                              FlatButton(
-                                                                                shape: RoundedRectangleBorder(
-                                                                                  borderRadius: BorderRadius.circular(18.0),
-                                                                                ),
-                                                                                color: Colors.green,
-                                                                                child: Text("Yes"),
-                                                                                onPressed: () {
-                                                                                  var plot_docid = snapshot.data.documents[index].id;
-
-                                                                                  DocumentReference documentReference = FirebaseFirestore.instance.collection('data').doc(widget.uid).collection("projects").doc(widget.doc_id).collection("plots").doc(plot_docid);
-                                                                                  documentReference.update({
-                                                                                    "registrationComplete": true
-                                                                                  });
-                                                                                  Navigator.of(context).pop();
-                                                                                  Navigator.of(context).pop();
-                                                                                },
-                                                                              )
-                                                                            ]));
-                                                              },
-                                                            )
-                                                          : Container(
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center,
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .all(20),
-                                                              child: Text(
-                                                                "Property Registered",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        20,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    color: Colors
-                                                                        .red),
-                                                              )),
-                                                    ],
-                                                  ),
-                                                )
-                                              : Container();
-                                        },
-                                      ),
-                                    ),
-                                    Container(
-                                        width: size.width * 0.24,
-                                        child: !registrationComplete
-                                            ? Text(
-                                                "Property Registered",
-                                                style: TextStyle(
-                                                    color: Colors.grey,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              )
-                                            : FlatButton(
-                                                color: available,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          18.0),
-                                                ),
-                                                child: Text(
-                                                  booked ? "Cancel" : "Book",
-                                                  style: TextStyle(
-                                                      color: Colors.black),
-                                                ),
-                                                onPressed: () {
-                                                  showDialog(
-                                                      context: context,
-                                                      builder: (_) => snapshot
-                                                                  .data
-                                                                  .documents[
-                                                                      index]
-                                                                  .data()[
-                                                                      "isbooked"]
-                                                                  .toString() ==
-                                                              "false"
-                                                          ? AlertDialog(
-                                                              content:
-                                                                  _updatePlotDetails(),
-                                                              actions: <Widget>[
-                                                                FlatButton(
-                                                                  shape:
-                                                                      RoundedRectangleBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            18.0),
-                                                                  ),
-                                                                  color: Colors
-                                                                      .green,
-                                                                  //button to save buyer info details to DB
-                                                                  child: Text(
-                                                                      'Submit'),
-                                                                  onPressed:
-                                                                      () async {
-                                                                    if (_formKey
-                                                                        .currentState
-                                                                        .validate()) {
-                                                                      _update_data(
-                                                                          snapshot
-                                                                              .data
-                                                                              .documents[
-                                                                                  index]
-                                                                              .id,
-                                                                          snapshot
-                                                                              .data
-                                                                              .documents[index]
-                                                                              .data()["isbooked"]);
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop();
-                                                                    }
-                                                                  },
-                                                                ),
-                                                              ],
-                                                            )
-                                                          : AlertDialog(
-                                                              title: Text(
-                                                                  "Cancel Booking"),
-                                                              content:
-                                                                  SingleChildScrollView(
-                                                                child: Text(
-                                                                    "Are you sure to cancel booking"),
-                                                              ),
-                                                              actions: <Widget>[
-                                                                FlatButton(
-                                                                  shape:
-                                                                      RoundedRectangleBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            18.0),
-                                                                  ),
-                                                                  color: Colors
-                                                                      .red,
-                                                                  child: Text(
-                                                                      "Cancel Booking"),
-                                                                  onPressed:
-                                                                      () {
-                                                                    _update_data(
-                                                                        snapshot
-                                                                            .data
-                                                                            .documents[
-                                                                                index]
-                                                                            .id,
-                                                                        snapshot
+                                                                  Colors.grey,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        )
+                                                      : OutlineButton(
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        18.0),
+                                                          ),
+                                                          child: Text(
+                                                            booked
+                                                                ? "Cancel"
+                                                                : "Book",
+                                                            style: TextStyle(
+                                                                color:
+                                                                    available,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                          onPressed: () {
+                                                            showDialog(
+                                                                context:
+                                                                    context,
+                                                                builder: (_) => snapshot
                                                                             .data
                                                                             .documents[index]
-                                                                            .data()["isbooked"]);
-                                                                    Navigator.of(
-                                                                            context)
-                                                                        .pop();
-                                                                  },
-                                                                )
+                                                                            .data()["isbooked"]
+                                                                            .toString() ==
+                                                                        "false"
+                                                                    ? AlertDialog(
+                                                                        content:
+                                                                            _updatePlotDetails(),
+                                                                        actions: <
+                                                                            Widget>[
+                                                                          OutlineButton(
+                                                                            shape:
+                                                                                RoundedRectangleBorder(
+                                                                              borderRadius: BorderRadius.circular(18.0),
+                                                                            ),
+
+                                                                            //button to save buyer info details to DB
+                                                                            child:
+                                                                                Text(
+                                                                              'Cancel',
+                                                                              style: TextStyle(color: Colors.red[900], fontWeight: FontWeight.bold),
+                                                                            ),
+                                                                            onPressed:
+                                                                                () {
+                                                                              Navigator.pop(context);
+                                                                            },
+                                                                          ),
+                                                                          OutlineButton(
+                                                                            shape:
+                                                                                RoundedRectangleBorder(
+                                                                              borderRadius: BorderRadius.circular(18.0),
+                                                                            ),
+
+                                                                            //button to save buyer info details to DB
+                                                                            child:
+                                                                                Text(
+                                                                              'Submit',
+                                                                              style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+                                                                            ),
+                                                                            onPressed:
+                                                                                () async {
+                                                                              if (_formKey.currentState.validate()) {
+                                                                                _update_data(snapshot.data.documents[index].id, snapshot.data.documents[index].data()["isbooked"]);
+                                                                                Navigator.of(context).pop();
+                                                                              }
+                                                                            },
+                                                                          ),
+                                                                        ],
+                                                                      )
+                                                                    : AlertDialog(
+                                                                        title: Text(
+                                                                            "Cancel Booking"),
+                                                                        content:
+                                                                            SingleChildScrollView(
+                                                                          child:
+                                                                              Text("Are you sure to cancel booking"),
+                                                                        ),
+                                                                        actions: <
+                                                                            Widget>[
+                                                                          FlatButton(
+                                                                            shape:
+                                                                                RoundedRectangleBorder(
+                                                                              borderRadius: BorderRadius.circular(18.0),
+                                                                            ),
+                                                                            color:
+                                                                                Colors.red,
+                                                                            child:
+                                                                                Text("Cancel Booking"),
+                                                                            onPressed:
+                                                                                () {
+                                                                              _update_data(snapshot.data.documents[index].id, snapshot.data.documents[index].data()["isbooked"]);
+                                                                              Navigator.of(context).pop();
+                                                                            },
+                                                                          )
+                                                                        ],
+                                                                      ));
+                                                          },
+                                                        )),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ));
+                              });
+                        },
+                      ),
+                    ),
+                  ]),
+                ),
+              )
+            : Scaffold(
+                backgroundColor: Colors.white,
+                appBar: customAppbar(context, widget.doc_id.toString()),
+                body: Container(
+                  color: Colors.grey[300],
+                  height: size.height,
+                  child: Column(children: <Widget>[
+                    Expanded(
+                      child: StreamBuilder(
+                        stream: getProjectPlotsStreamSnapshots(context),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData)
+                            return const AlertDialog(
+                              backgroundColor: Colors.transparent,
+                              content: Text(
+                                "Loading...",
+                                textAlign: TextAlign.center,
+                              ),
+                            );
+                          return new ListView.builder(
+                              physics: BouncingScrollPhysics(),
+                              itemCount: snapshot.data.documents.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                booked = snapshot.data.documents[index]
+                                    .data()['isbooked'];
+                                available = snapshot.data.documents[index]
+                                        .data()['isbooked']
+                                    ? Colors.red
+                                    : Colors.green;
+                                bool registrationComplete = !snapshot
+                                    .data.documents[index]
+                                    .data()['registrationComplete'];
+
+                                return Container(
+                                    height: 90,
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(15.0),
+                                      ),
+                                      elevation: 9,
+                                      shadowColor: Colors.black,
+                                      child: Column(
+                                        children: <Widget>[
+                                          Row(
+                                            children: <Widget>[
+                                              Container(
+                                                width: size.width * 0.7,
+                                                child: ListTile(
+                                                  contentPadding:
+                                                      EdgeInsets.only(
+                                                          top: 3, left: 15),
+                                                  leading: Container(
+                                                    width: 50,
+                                                    height: 50,
+                                                    decoration: BoxDecoration(
+                                                      border:
+                                                          Border.all(width: 2),
+                                                      shape: BoxShape.circle,
+                                                      // You can use like this way or like the below line
+                                                      //borderRadius: new BorderRadius.circular(30.0),
+                                                    ),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: <Widget>[
+                                                        Text(
+                                                          snapshot.data
+                                                              .documents[index]
+                                                              .data()[
+                                                                  'plotname']
+                                                              .toString(),
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 20,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  title:
+                                                      Text(
+                                                          booked
+                                                              ? snapshot
+                                                                      .data
+                                                                      .documents[
+                                                                          index]
+                                                                      .data()[
+                                                                  'buyername']
+                                                              : "Available",
+                                                          style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          )),
+                                                  subtitle: Text(
+                                                      booked
+                                                          ? snapshot.data
+                                                                  .documents[index]
+                                                                  .data()[
+                                                              'buyerphonenumber']
+                                                          : "${snapshot.data.documents[index].data()['directionFacing']} - ${snapshot.data.documents[index].data()['area']} sq.ft ",
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      )),
+                                                  onTap: () {
+                                                    snapshot.data
+                                                            .documents[index]
+                                                            .data()["isbooked"]
+                                                        ? showDialog(
+                                                            context: context,
+                                                            builder: (_) =>
+                                                                AlertDialog(
+                                                              content: showbuyerinfoalert(
+                                                                  snapshot
+                                                                      .data
+                                                                      .documents[
+                                                                          index]
+                                                                      .data()),
+                                                              actions: <Widget>[
+                                                                registrationComplete
+                                                                    //button to confirm registration
+                                                                    ? FlatButton(
+                                                                        shape:
+                                                                            RoundedRectangleBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(18.0),
+                                                                        ),
+                                                                        color: Colors
+                                                                            .green,
+                                                                        child: Text(
+                                                                            'Submit'),
+                                                                        onPressed:
+                                                                            () async {
+                                                                          showDialog(
+                                                                              context: context,
+                                                                              builder: (_) => AlertDialog(
+                                                                                      title: Text("Registration Confirmation"),
+                                                                                      content: SingleChildScrollView(
+                                                                                        child: Text("Are you sure registration is complete?"),
+                                                                                      ),
+                                                                                      actions: <Widget>[
+                                                                                        FlatButton(
+                                                                                          shape: RoundedRectangleBorder(
+                                                                                            borderRadius: BorderRadius.circular(18.0),
+                                                                                          ),
+                                                                                          color: Colors.green,
+                                                                                          child: Text("Yes"),
+                                                                                          onPressed: () {
+                                                                                            var plot_docid = snapshot.data.documents[index].id;
+
+                                                                                            DocumentReference documentReference = FirebaseFirestore.instance.collection(widget.promotorName).doc("Projects").collection("projectlist").doc(widget.doc_id).collection("plots").doc(plot_docid);
+                                                                                            documentReference.update({
+                                                                                              "registrationComplete": true
+                                                                                            });
+                                                                                            Navigator.of(context).pop();
+                                                                                            Navigator.of(context).pop();
+                                                                                          },
+                                                                                        )
+                                                                                      ]));
+                                                                        },
+                                                                      )
+                                                                    : Container(
+                                                                        alignment:
+                                                                            Alignment
+                                                                                .center,
+                                                                        padding:
+                                                                            EdgeInsets.all(
+                                                                                20),
+                                                                        child:
+                                                                            Text(
+                                                                          "Property Registered",
+                                                                          style: TextStyle(
+                                                                              fontSize: 20,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              color: Colors.red),
+                                                                        )),
                                                               ],
-                                                            ));
-                                                },
-                                              )),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ));
-                    });
-              },
-            ),
-          ),
-        ]),
-      ),
-    ));
+                                                            ),
+                                                          )
+                                                        : editplotdetails(
+                                                            snapshot
+                                                                .data
+                                                                .documents[
+                                                                    index]
+                                                                .data(),
+                                                            snapshot
+                                                                .data
+                                                                .documents[
+                                                                    index]
+                                                                .id);
+                                                  },
+                                                ),
+                                              ),
+                                              Container(
+                                                  width: size.width * 0.24,
+                                                  child: !registrationComplete
+                                                      ? Text(
+                                                          "Property Registered",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.grey,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        )
+                                                      : OutlineButton(
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        18.0),
+                                                          ),
+                                                          child: Text(
+                                                            booked
+                                                                ? "Cancel"
+                                                                : "Book",
+                                                            style: TextStyle(
+                                                                color:
+                                                                    available,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                          onPressed: () {
+                                                            showDialog(
+                                                                context:
+                                                                    context,
+                                                                builder: (_) => snapshot
+                                                                            .data
+                                                                            .documents[index]
+                                                                            .data()["isbooked"]
+                                                                            .toString() ==
+                                                                        "false"
+                                                                    ? AlertDialog(
+                                                                        content:
+                                                                            _updatePlotDetails(),
+                                                                        actions: <
+                                                                            Widget>[
+                                                                          OutlineButton(
+                                                                            shape:
+                                                                                RoundedRectangleBorder(
+                                                                              borderRadius: BorderRadius.circular(18.0),
+                                                                            ),
+
+                                                                            //button to save buyer info details to DB
+                                                                            child:
+                                                                                Text(
+                                                                              'Cancel',
+                                                                              style: TextStyle(color: Colors.red[900], fontWeight: FontWeight.bold),
+                                                                            ),
+                                                                            onPressed:
+                                                                                () {
+                                                                              Navigator.pop(context);
+                                                                            },
+                                                                          ),
+                                                                          OutlineButton(
+                                                                            shape:
+                                                                                RoundedRectangleBorder(
+                                                                              borderRadius: BorderRadius.circular(18.0),
+                                                                            ),
+
+                                                                            //button to save buyer info details to DB
+                                                                            child:
+                                                                                Text(
+                                                                              'Submit',
+                                                                              style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+                                                                            ),
+                                                                            onPressed:
+                                                                                () async {
+                                                                              if (_formKey.currentState.validate()) {
+                                                                                _update_data(snapshot.data.documents[index].id, snapshot.data.documents[index].data()["isbooked"]);
+                                                                                Navigator.of(context).pop();
+                                                                              }
+                                                                            },
+                                                                          ),
+                                                                        ],
+                                                                      )
+                                                                    : AlertDialog(
+                                                                        title: Text(
+                                                                            "Cancel Booking"),
+                                                                        content:
+                                                                            SingleChildScrollView(
+                                                                          child:
+                                                                              Text("Are you sure to cancel booking"),
+                                                                        ),
+                                                                        actions: <
+                                                                            Widget>[
+                                                                          FlatButton(
+                                                                            shape:
+                                                                                RoundedRectangleBorder(
+                                                                              borderRadius: BorderRadius.circular(18.0),
+                                                                            ),
+                                                                            color:
+                                                                                Colors.red,
+                                                                            child:
+                                                                                Text("Cancel Booking"),
+                                                                            onPressed:
+                                                                                () {
+                                                                              _update_data(snapshot.data.documents[index].id, snapshot.data.documents[index].data()["isbooked"]);
+                                                                              Navigator.of(context).pop();
+                                                                            },
+                                                                          )
+                                                                        ],
+                                                                      ));
+                                                          },
+                                                        )),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ));
+                              });
+                        },
+                      ),
+                    ),
+                  ]),
+                ),
+              ));
+  }
+
+  Stream<QuerySnapshot> getProjectPlotsStreamSnapshots(
+      BuildContext context) async* {
+    yield* FirebaseFirestore.instance
+        .collection(widget.promotorName)
+        .doc("Projects")
+        .collection("projectlist")
+        .doc(widget.doc_id)
+        .collection("plots")
+        .orderBy("plotname", descending: false)
+        .snapshots();
   }
 
   Widget _updatePlotDetails() {
@@ -401,6 +779,21 @@ class _PlotNamesState extends State<PlotNames> {
                       height: 5,
                     ),
                     TextFormField(
+                      keyboardType: TextInputType.number,
+                      controller: _bookingAmountcontroller,
+                      decoration: const InputDecoration(
+                        labelText: 'Booking Amount',
+                        prefixIcon: Icon(Icons.attach_money),
+                      ),
+                      validator: (String value) {
+                        if (value.isEmpty) return 'Please enter booking amount';
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    TextFormField(
                       keyboardType: TextInputType.text,
                       controller: _brokernamecontroller,
                       decoration: const InputDecoration(
@@ -420,9 +813,9 @@ class _PlotNamesState extends State<PlotNames> {
 
   _update_data(String plot_docid, bool booked) {
     DocumentReference documentReference = FirebaseFirestore.instance
-        .collection('data')
-        .doc(widget.uid)
-        .collection("projects")
+        .collection(widget.promotorName)
+        .doc("Projects")
+        .collection("projectlist")
         .doc(widget.doc_id)
         .collection("plots")
         .doc(plot_docid);
@@ -434,197 +827,90 @@ class _PlotNamesState extends State<PlotNames> {
             "brokername": _brokernamecontroller.text.length > 0
                 ? _brokernamecontroller.text.trim()
                 : null,
+            "bookingamount": _bookingAmountcontroller.text.trim(),
             "bookingdate": DateTime.now(),
+            "bookingperson": widget.empname
           })
         : documentReference.update({
             "isbooked": false,
             "buyername": null,
             "buyerphonenumber": null,
             "brokername": null,
-            "bookingdate": null
+            "bookingdate": null,
+            "bookingamount": null,
+            "bookingperson": null
           });
     _phonenumbercontroller.clear();
     _buyernamecontroller.clear();
     _brokernamecontroller.clear();
   }
 
-  Stream<QuerySnapshot> getProjectPlotsStreamSnapshots(
-      BuildContext context) async* {
-    yield* FirebaseFirestore.instance
-        .collection('data')
-        .doc(widget.uid)
-        .collection("projects")
-        .doc(widget.doc_id)
-        .collection("plots")
-        .orderBy("plotname", descending: false)
-        .snapshots();
-  }
-
-  Widget _showbuyerinfoalert(var buyerinfo) {
-    print(DateTime.now());
-    var date = DateTime.fromMillisecondsSinceEpoch(
-        buyerinfo['bookingdate'].millisecondsSinceEpoch);
-    DateFormat formatter = DateFormat('dd-MMM-yyyy');
-    return Container(
-        width: double.maxFinite,
-        child: ListView(shrinkWrap: true, padding: EdgeInsets.only(top: 10),
-            //scrollDirection: Axis.vertical,
-            children: <Widget>[
-              Column(children: <Widget>[
-                Container(
-                  child: Center(
-                    child: Text(
-                      "Verify Registration",
-                      style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  alignment: Alignment.topLeft,
-                  width: double.infinity,
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  padding: const EdgeInsets.all(1),
-                  decoration: BoxDecoration(
-                      // color: Colors.blueAccent,
-                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                  child: Row(
-                    children: [
-                      Icon(Icons.home),
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        //padding: const EdgeInsets.all(20),
-                        child: Text(
-                          buyerinfo["plotname"].toString(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 23,
-                              color: showinfo,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.topLeft,
-                  width: double.infinity,
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  padding: const EdgeInsets.all(1),
-                  decoration: BoxDecoration(
-                      // color: Colors.blueAccent,
-                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                  child: Row(
-                    children: [
-                      Icon(Icons.aspect_ratio),
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        //padding: const EdgeInsets.all(20),
-                        child: Text(
-                          buyerinfo["area"] + " " + "sq.ft",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 23,
-                              color: showinfo,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.topLeft,
-                  width: double.infinity,
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  padding: const EdgeInsets.all(1),
-                  decoration: BoxDecoration(
-                      // color: Colors.blueAccent,
-                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                  child: Row(
-                    children: [
-                      Icon(Icons.face),
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        //padding: const EdgeInsets.all(20),
-                        child: Text(
-                          buyerinfo["buyername"],
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 23,
-                              color: showinfo,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.topLeft,
-                  width: double.infinity,
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  padding: const EdgeInsets.all(1),
-                  decoration: BoxDecoration(
-                      // color: Colors.blueAccent,
-                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                  child: Row(
-                    children: [
-                      Icon(Icons.phone),
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        //padding: const EdgeInsets.all(20),
-                        child: Text(
-                          buyerinfo["buyerphonenumber"],
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 23,
-                              color: showinfo,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.topLeft,
-                  width: double.infinity,
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  padding: const EdgeInsets.all(1),
-                  decoration: BoxDecoration(
-                      // color: Colors.blueAccent,
-                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                  child: Row(
-                    children: [
-                      Icon(Icons.calendar_today),
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        //padding: const EdgeInsets.all(20),
-                        child: Text(
-                          formatter.format(date),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 23,
-                              color: showinfo,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ])
-            ]));
-  }
-
-  addplotcount() {
+  _addplotcount() {
     showDialog(
-        context: context, builder: (_) => AlertDialog(content: _addplots()));
+        context: context,
+        builder: (_) => AlertDialog(
+              content: _addplots(),
+              actions: <Widget>[
+                OutlineButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                  ),
+
+                  //button to save buyer info details to DB
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(
+                        color: Colors.red[900], fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                OutlineButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
+                    color: Colors.green,
+                    //button to save buyer info details to DB
+                    child: Text(
+                      'Submit',
+                      style: TextStyle(
+                          color: Colors.green, fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () async {
+                      print("onPressed");
+                      if (_formKey.currentState.validate()) {
+                        CollectionReference collectionReference =
+                            FirebaseFirestore.instance
+                                .collection(widget.promotorName)
+                                .doc("Projects")
+                                .collection("projectlist")
+                                .doc(widget.doc_id)
+                                .collection("plots");
+                        var getdoclength = await collectionReference
+                            .get()
+                            .then((value) => value.size);
+                        doclength = getdoclength.toInt();
+                        range = int.parse(_addplotscontroller.text.trim());
+                        for (int i = 1 + doclength;
+                            i <= range + doclength;
+                            i++) {
+                          collectionReference.add({
+                            "plotname": i,
+                            "area": _areainputcontroller.text.trim(),
+                            "directionFacing": directionVal,
+                            "isbooked": false,
+                            "registrationComplete": false
+                          });
+                        }
+                        Navigator.pop(context);
+                      }
+                      _areainputcontroller.clear();
+                      _addplotscontroller.clear();
+                      _directionFacingcontroller.clear();
+                    })
+              ],
+            ));
   }
 
   Widget _addplots() {
@@ -639,7 +925,7 @@ class _PlotNamesState extends State<PlotNames> {
               child: Column(
             children: <Widget>[
               Text(
-                "Buyer Info",
+                "Add Plots",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               Form(
@@ -650,45 +936,231 @@ class _PlotNamesState extends State<PlotNames> {
                       height: 10,
                     ),
                     TextFormField(
-                      controller: _buyernamecontroller,
+                      //initialValue: "1",
+                      controller: _addplotscontroller,
                       decoration: const InputDecoration(
-                        labelText: 'Buyer Name',
-                        prefixIcon: Icon(Icons.person_add),
+                        labelText: 'Number of items to add',
+                        prefixIcon: Icon(Icons.format_list_numbered),
                       ),
+                      validator: (String value) {
+                        if (value.isEmpty) return 'Please enter atleast one';
+                        return null;
+                      },
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                        //initialValue: "1200",
+                        controller: _areainputcontroller,
+                        decoration: const InputDecoration(
+                          labelText: 'Total sq.feet',
+                          prefixIcon: Icon(Icons.aspect_ratio),
+                        ),
+                        validator: (String value) {
+                          if (value.isEmpty) return 'Please enter area';
+                          return null;
+                        }),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    DropdownButtonFormField(
+                      //initialValue: "1200",
+                      //controller: _directionFacingcontroller,
+                      decoration: const InputDecoration(
+                        labelText: 'Direction Facing',
+                        prefixIcon: Icon(Icons.navigation),
+                      ),
+                      items: [
+                        DropdownMenuItem(
+                          child: Text("SE"),
+                          value: "SE",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("NE"),
+                          value: "NE",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("SW"),
+                          value: "SW",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("NW"),
+                          value: "NW",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("East"),
+                          value: "East",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("West"),
+                          value: "West",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("North"),
+                          value: "North",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("South"),
+                          value: "South",
+                        ),
+                      ],
+                      onChanged: (value) => directionVal = value,
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ))
+        ],
+      ),
+    );
+  }
+
+  editplotdetails(var plotdetails, var plot_docid) {
+    return showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+              content: editplots(plotdetails),
+              actions: <Widget>[
+                OutlineButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
+                    color: Colors.red,
+                    //button to save buyer info details to DB
+                    child: Text(
+                      'Remove',
+                      style: TextStyle(
+                          color: Colors.red[900], fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () async {
+                      DocumentReference documentReference = FirebaseFirestore
+                          .instance
+                          .collection(widget.promotorName)
+                          .doc("Projects")
+                          .collection("projectlist")
+                          .doc(widget.doc_id)
+                          .collection("plots")
+                          .doc(plot_docid);
+                      documentReference.delete();
+                      Navigator.pop(context);
+                    }),
+                OutlineButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
+                    color: Colors.green,
+                    //button to save buyer info details to DB
+                    child: Text(
+                      'Submit',
+                      style: TextStyle(
+                          color: Colors.green, fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () async {
+                      DocumentReference documentReference = FirebaseFirestore
+                          .instance
+                          .collection(widget.promotorName)
+                          .doc("Projects")
+                          .collection("projectlist")
+                          .doc(widget.doc_id)
+                          .collection("plots")
+                          .doc(plot_docid);
+                      documentReference.update({
+                        "area":
+                            editarea == null ? plotdetails['area'] : editarea,
+                        "directionFacing":
+                            directionVal == plotdetails['directionFacing']
+                                ? plotdetails['directionFacing']
+                                : directionVal
+                      });
+                      Navigator.pop(context);
+                    })
+              ],
+            ));
+  }
+
+  Widget editplots(var plotdetails) {
+    return Container(
+      width: double.maxFinite,
+      child: ListView(
+        shrinkWrap: true,
+        padding: EdgeInsets.only(top: 10),
+        scrollDirection: Axis.vertical,
+        children: <Widget>[
+          Center(
+              child: Column(
+            children: <Widget>[
+              Text(
+                "Edit Plot Details",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              Form(
+                //key: _formKey,
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      initialValue: plotdetails["area"],
+                      //controller: _editareacontroller,
+                      decoration: const InputDecoration(
+                        labelText: 'Edit area',
+                        prefixIcon: Icon(Icons.aspect_ratio),
+                      ),
+                      onChanged: (value) => editarea = value,
                       validator: (String value) {
                         if (value.isEmpty) return 'Please enter some text';
                         return null;
                       },
                     ),
                     SizedBox(
-                      height: 5,
+                      height: 10,
                     ),
-                    TextFormField(
-                      keyboardType: TextInputType.phone,
-                      controller: _phonenumbercontroller,
+                    DropdownButtonFormField(
+                      value: plotdetails['directionFacing'],
+                      //controller: _directionFacingcontroller,
                       decoration: const InputDecoration(
-                        labelText: 'Phone',
-                        prefixIcon: Icon(Icons.phone),
+                        labelText: 'Direction Facing',
+                        prefixIcon: Icon(Icons.navigation),
                       ),
-                      validator: (String value) {
-                        String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
-                        RegExp regExp = new RegExp(pattern);
-                        if (value.isEmpty || !regExp.hasMatch(value))
-                          return 'Please enter valid phone';
-                        return null;
-                      },
+                      items: [
+                        DropdownMenuItem(
+                          child: Text("SE"),
+                          value: "SE",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("NE"),
+                          value: "NE",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("SW"),
+                          value: "SW",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("NW"),
+                          value: "NW",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("East"),
+                          value: "East",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("West"),
+                          value: "West",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("North"),
+                          value: "North",
+                        ),
+                        DropdownMenuItem(
+                          child: Text("South"),
+                          value: "South",
+                        ),
+                      ],
+                      onChanged: (value) => directionVal = value,
                     ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    TextFormField(
-                      keyboardType: TextInputType.text,
-                      controller: _brokernamecontroller,
-                      decoration: const InputDecoration(
-                        labelText: 'Broker Name',
-                        prefixIcon: Icon(Icons.person_add),
-                      ),
-                    )
                   ],
                 ),
               )

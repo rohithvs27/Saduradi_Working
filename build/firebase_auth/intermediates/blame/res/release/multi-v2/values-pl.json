@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/rohith/AndroidStudioProjects/Saduradi_Dev-master/build/firebase_auth/intermediates/incremental/mergeReleaseResources/merged.dir/values-pl/values-pl.xml",
+            "outputFile": "/Users/rohith/AndroidStudioProjects/saduradi_phone_signin/build/firebase_auth/intermediates/res/merged/release/values-pl/values-pl.xml",
             "map": [
                 {
                     "source": "/Users/rohith/.gradle/caches/transforms-2/files-2.1/571f4d7695af3056ef9097db87dedc9a/jetified-play-services-basement-17.0.0/res/values-pl/values.xml",
@@ -57,7 +57,7 @@
             ]
         },
         {
-            "outputFile": "/Users/rohith/AndroidStudioProjects/Saduradi_Dev-master/build/firebase_auth/intermediates/res/merged/release/values-pl/values-pl.xml",
+            "outputFile": "/Users/rohith/AndroidStudioProjects/saduradi_phone_signin/build/firebase_auth/intermediates/incremental/mergeReleaseResources/merged.dir/values-pl/values-pl.xml",
             "map": [
                 {
                     "source": "/Users/rohith/.gradle/caches/transforms-2/files-2.1/571f4d7695af3056ef9097db87dedc9a/jetified-play-services-basement-17.0.0/res/values-pl/values.xml",

@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Saduradi',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -37,16 +37,22 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> with AfterLayoutMixin<Splash> {
+  bool admin = false;
   Future checkFirstSeen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String uid = prefs.get('uid');
+    admin = prefs.getBool('admin');
+    String empname = prefs.get('empname');
+    String promotorname = prefs.get('promotorname');
 
     if (uid == null) {
       Navigator.of(context).pushReplacement(
           new MaterialPageRoute(builder: (context) => new SignInPage()));
     } else {
-      Navigator.of(context).pushReplacement(
-          new MaterialPageRoute(builder: (context) => new MyHomePage(uid)));
+      print(uid);
+      Navigator.of(context).pushReplacement(new MaterialPageRoute(
+          builder: (context) =>
+              new MyHomePage(promotorname, uid, admin, empname)));
     }
   }
 

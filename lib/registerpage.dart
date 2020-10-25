@@ -145,8 +145,11 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
       Scaffold.of(context).showSnackBar(SnackBar(
         content: Text("${user.email} signed in"),
       ));
-      Navigator.pushReplacement(context,
-          new MaterialPageRoute(builder: (context) => MyHomePage(user.uid)));
+      Navigator.pushReplacement(
+          context,
+          new MaterialPageRoute(
+              builder: (context) =>
+                  MyHomePage("rohithpromtors", user.uid, true, "test")));
     } catch (e) {
       authException = e;
       print(authException.message);

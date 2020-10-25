@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/rohith/AndroidStudioProjects/Saduradi_Dev-master/build/app/intermediates/incremental/mergeReleaseResources/merged.dir/values-da/values-da.xml",
+            "outputFile": "/Users/rohith/AndroidStudioProjects/saduradi_phone_signin/build/app/intermediates/incremental/mergeReleaseResources/merged.dir/values-da/values-da.xml",
             "map": [
                 {
                     "source": "/Users/rohith/.gradle/caches/transforms-2/files-2.1/571f4d7695af3056ef9097db87dedc9a/jetified-play-services-basement-17.0.0/res/values-da/values.xml",

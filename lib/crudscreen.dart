@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:saduradi_phone_signin/widgets/Appbar.dart';
 
 class CrudScreen extends StatefulWidget {
-  String uid;
-  CrudScreen(this.uid);
+  final String uid;
+  final String promotorName;
+  CrudScreen(this.promotorName, this.uid);
+
   @override
   _CrudScreenState createState() => _CrudScreenState();
 }
@@ -22,6 +25,7 @@ class _CrudScreenState extends State<CrudScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: customAppbar(context, widget.promotorName),
         body: Container(
           color: Colors.black,
           child: Center(
@@ -30,14 +34,17 @@ class _CrudScreenState extends State<CrudScreen> {
                 RaisedButton(
                   child: Text("AddData"),
                   onPressed: () {
-                    CollectionReference collectionReference =
-                        FirebaseFirestore.instance.collection('data');
+                    CollectionReference collectionReference = FirebaseFirestore
+                        .instance
+                        .collection(widget.promotorName);
                     collectionReference
+                        .doc('Users')
+                        .collection("usercollection")
                         .doc(widget.uid)
-                        .collection("projects")
-                        .doc("Salem")
-                        .collection("plots")
-                        .add(data1);
+                        .get()
+                        .then((user) => {
+                              if (user.exists) {print(user.data()['isAdmin'])}
+                            });
                   },
                 ),
                 SizedBox(

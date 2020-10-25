@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/rohith/AndroidStudioProjects/Saduradi_Dev-master/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values/values.xml",
+            "outputFile": "/Users/rohith/AndroidStudioProjects/saduradi_phone_signin/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values/values.xml",
             "map": [
                 {
                     "source": "/Users/rohith/.gradle/caches/transforms-2/files-2.1/cc05cbb20248c793dee14f7d6605fdfb/core-1.1.0/res/values/values.xml",
@@ -23,7 +23,7 @@
                     }
                 },
                 {
-                    "source": "/Users/rohith/AndroidStudioProjects/Saduradi_Dev-master/android/app/src/main/res/values/styles.xml",
+                    "source": "/Users/rohith/AndroidStudioProjects/saduradi_phone_signin/android/app/src/main/res/values/styles.xml",
                     "from": {
                         "startLines": "3,14",
                         "startColumns": "4,4",
@@ -39,6 +39,23 @@
                         "endLines": "117,120",
                         "endColumns": "12,12",
                         "endOffsets": "8964,9129"
+                    }
+                },
+                {
+                    "source": "/Users/rohith/AndroidStudioProjects/saduradi_phone_signin/build/app/generated/res/google-services/debug/values/values.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,199,318,400,504,613,733,841",
+                        "endColumns": "143,118,81,103,108,119,107,84",
+                        "endOffsets": "194,313,395,499,608,728,836,921"
+                    },
+                    "to": {
+                        "startLines": "104,105,106,107,108,109,110,111",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "7730,7874,7993,8075,8179,8288,8408,8516",
+                        "endColumns": "143,118,81,103,108,119,107,84",
+                        "endOffsets": "7869,7988,8070,8174,8283,8403,8511,8596"
                     }
                 },
                 {
@@ -75,23 +92,6 @@
                         "startOffsets": "5259,6437",
                         "endColumns": "67,166",
                         "endOffsets": "5322,6599"
-                    }
-                },
-                {
-                    "source": "/Users/rohith/AndroidStudioProjects/Saduradi_Dev-master/build/app/generated/res/google-services/debug/values/values.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,199,318,400,504,613,733,841",
-                        "endColumns": "143,118,81,103,108,119,107,84",
-                        "endOffsets": "194,313,395,499,608,728,836,921"
-                    },
-                    "to": {
-                        "startLines": "104,105,106,107,108,109,110,111",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "7730,7874,7993,8075,8179,8288,8408,8516",
-                        "endColumns": "143,118,81,103,108,119,107,84",
-                        "endOffsets": "7869,7988,8070,8174,8283,8403,8511,8596"
                     }
                 }
             ]

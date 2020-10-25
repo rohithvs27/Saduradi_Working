@@ -1,7 +1,7 @@
 # compiler: R8
 # compiler_version: 1.5.64
 # min_api: 16
-# pg_map_id: 69cb8f4
+# pg_map_id: fc630cb
 androidx.activity.Cancellable -> androidx.activity.a:
 androidx.activity.ComponentActivity -> androidx.activity.ComponentActivity:
     androidx.activity.OnBackPressedDispatcher mOnBackPressedDispatcher -> e
@@ -9611,8 +9611,10 @@ com.google.common.base.MoreObjects$ToStringHelper -> b.a.c.a.e$b:
     com.google.common.base.MoreObjects$ToStringHelper add(java.lang.String,long) -> a
     com.google.common.base.MoreObjects$ToStringHelper add(java.lang.String,java.lang.Object) -> a
     com.google.common.base.MoreObjects$ToStringHelper add(java.lang.String,boolean) -> a
+    com.google.common.base.MoreObjects$ToStringHelper addValue(java.lang.Object) -> a
     com.google.common.base.MoreObjects$ToStringHelper omitNullValues() -> a
     com.google.common.base.MoreObjects$ToStringHelper$ValueHolder addHolder() -> b
+    com.google.common.base.MoreObjects$ToStringHelper addHolder(java.lang.Object) -> b
     com.google.common.base.MoreObjects$ToStringHelper addHolder(java.lang.String,java.lang.Object) -> b
 com.google.common.base.MoreObjects$ToStringHelper$ValueHolder -> b.a.c.a.e$b$a:
     java.lang.Object value -> b
@@ -9637,6 +9639,7 @@ com.google.common.base.Preconditions -> b.a.c.a.i:
     void checkArgument(boolean,java.lang.String,char) -> a
     void checkArgument(boolean,java.lang.String,char,java.lang.Object) -> a
     void checkArgument(boolean,java.lang.String,int) -> a
+    void checkArgument(boolean,java.lang.String,int,int) -> a
     void checkArgument(boolean,java.lang.String,long) -> a
     void checkArgument(boolean,java.lang.String,java.lang.Object) -> a
     void checkArgument(boolean,java.lang.String,java.lang.Object,java.lang.Object) -> a
@@ -9864,18 +9867,21 @@ com.google.common.util.concurrent.AbstractFuture -> b.a.c.e.a.a:
     com.google.common.util.concurrent.AbstractFuture$Waiter access$802(com.google.common.util.concurrent.AbstractFuture,com.google.common.util.concurrent.AbstractFuture$Waiter) -> a
     com.google.common.util.concurrent.AbstractFuture$Listener access$902(com.google.common.util.concurrent.AbstractFuture,com.google.common.util.concurrent.AbstractFuture$Listener) -> a
     void addDoneString(java.lang.StringBuilder) -> a
+    void addListener(java.lang.Runnable,java.util.concurrent.Executor) -> a
     void afterDone() -> a
     java.util.concurrent.CancellationException cancellationExceptionWithCause(java.lang.String,java.lang.Throwable) -> a
     com.google.common.util.concurrent.AbstractFuture$Listener clearListeners(com.google.common.util.concurrent.AbstractFuture$Listener) -> a
-    void executeListener(java.lang.Runnable,java.util.concurrent.Executor) -> a
-    java.lang.Object getDoneValue(java.lang.Object) -> a
     void removeWaiter(com.google.common.util.concurrent.AbstractFuture$Waiter) -> a
+    boolean set(java.lang.Object) -> a
+    boolean setException(java.lang.Throwable) -> a
     void access$600(com.google.common.util.concurrent.AbstractFuture) -> b
+    void executeListener(java.lang.Runnable,java.util.concurrent.Executor) -> b
+    java.lang.Object getDoneValue(java.lang.Object) -> b
     java.lang.Object getFutureValue(com.google.common.util.concurrent.ListenableFuture) -> b
     void interruptTask() -> b
-    java.lang.String userObjectToString(java.lang.Object) -> b
     com.google.common.util.concurrent.AbstractFuture$Waiter access$800(com.google.common.util.concurrent.AbstractFuture) -> c
     java.lang.String pendingToString() -> c
+    java.lang.String userObjectToString(java.lang.Object) -> c
     com.google.common.util.concurrent.AbstractFuture$AtomicHelper access$200() -> d
     com.google.common.util.concurrent.AbstractFuture$Listener access$900(com.google.common.util.concurrent.AbstractFuture) -> d
     boolean access$300() -> e
@@ -9922,6 +9928,7 @@ com.google.common.util.concurrent.AbstractFuture$SynchronizedHelper -> b.a.c.e.a
     void putNext(com.google.common.util.concurrent.AbstractFuture$Waiter,com.google.common.util.concurrent.AbstractFuture$Waiter) -> a
     void putThread(com.google.common.util.concurrent.AbstractFuture$Waiter,java.lang.Thread) -> a
 com.google.common.util.concurrent.AbstractFuture$TrustedFuture -> b.a.c.e.a.a$i:
+    void addListener(java.lang.Runnable,java.util.concurrent.Executor) -> a
 com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper -> b.a.c.e.a.a$j:
     sun.misc.Unsafe UNSAFE -> a
     long WAITER_NEXT_OFFSET -> f
@@ -9942,21 +9949,31 @@ com.google.common.util.concurrent.AbstractFuture$Waiter -> b.a.c.e.a.a$k:
     void setNext(com.google.common.util.concurrent.AbstractFuture$Waiter) -> a
     void unpark() -> a
 com.google.common.util.concurrent.FluentFuture -> b.a.c.e.a.b:
-com.google.common.util.concurrent.Futures -> b.a.c.e.a.c:
+com.google.common.util.concurrent.FutureCallback -> b.a.c.e.a.c:
+    void onFailure(java.lang.Throwable) -> a
+    void onSuccess(java.lang.Object) -> a
+com.google.common.util.concurrent.Futures -> b.a.c.e.a.d:
+    void addCallback(com.google.common.util.concurrent.ListenableFuture,com.google.common.util.concurrent.FutureCallback,java.util.concurrent.Executor) -> a
     java.lang.Object getDone(java.util.concurrent.Future) -> a
-com.google.common.util.concurrent.GwtFluentFutureCatchingSpecialization -> b.a.c.e.a.d:
-com.google.common.util.concurrent.GwtFuturesCatchingSpecialization -> b.a.c.e.a.e:
-com.google.common.util.concurrent.ListenableFuture -> b.a.c.e.a.f:
-com.google.common.util.concurrent.MoreExecutors -> b.a.c.e.a.g:
+com.google.common.util.concurrent.Futures$CallbackListener -> b.a.c.e.a.d$a:
+    java.util.concurrent.Future future -> a
+    com.google.common.util.concurrent.FutureCallback callback -> b
+com.google.common.util.concurrent.GwtFluentFutureCatchingSpecialization -> b.a.c.e.a.e:
+com.google.common.util.concurrent.GwtFuturesCatchingSpecialization -> b.a.c.e.a.f:
+com.google.common.util.concurrent.ListenableFuture -> b.a.c.e.a.g:
+    void addListener(java.lang.Runnable,java.util.concurrent.Executor) -> a
+com.google.common.util.concurrent.MoreExecutors -> b.a.c.e.a.h:
     java.util.concurrent.Executor directExecutor() -> a
     boolean isAppEngine() -> b
     java.util.concurrent.ThreadFactory platformThreadFactory() -> c
-com.google.common.util.concurrent.MoreExecutors$DirectExecutor -> b.a.c.e.a.g$a:
+com.google.common.util.concurrent.MoreExecutors$DirectExecutor -> b.a.c.e.a.h$a:
     com.google.common.util.concurrent.MoreExecutors$DirectExecutor INSTANCE -> a
     com.google.common.util.concurrent.MoreExecutors$DirectExecutor[] $VALUES -> b
-com.google.common.util.concurrent.SettableFuture -> b.a.c.e.a.h:
+com.google.common.util.concurrent.SettableFuture -> b.a.c.e.a.i:
     boolean set(java.lang.Object) -> a
-com.google.common.util.concurrent.ThreadFactoryBuilder -> b.a.c.e.a.i:
+    boolean setException(java.lang.Throwable) -> a
+    com.google.common.util.concurrent.SettableFuture create() -> f
+com.google.common.util.concurrent.ThreadFactoryBuilder -> b.a.c.e.a.j:
     java.lang.Integer priority -> c
     java.lang.Thread$UncaughtExceptionHandler uncaughtExceptionHandler -> d
     java.util.concurrent.ThreadFactory backingThreadFactory -> e
@@ -9967,15 +9984,16 @@ com.google.common.util.concurrent.ThreadFactoryBuilder -> b.a.c.e.a.i:
     java.util.concurrent.ThreadFactory doBuild(com.google.common.util.concurrent.ThreadFactoryBuilder) -> a
     com.google.common.util.concurrent.ThreadFactoryBuilder setDaemon(boolean) -> a
     com.google.common.util.concurrent.ThreadFactoryBuilder setNameFormat(java.lang.String) -> a
+    com.google.common.util.concurrent.ThreadFactoryBuilder setPriority(int) -> a
     java.lang.String format(java.lang.String,java.lang.Object[]) -> b
-com.google.common.util.concurrent.ThreadFactoryBuilder$1 -> b.a.c.e.a.i$a:
+com.google.common.util.concurrent.ThreadFactoryBuilder$1 -> b.a.c.e.a.j$a:
     java.util.concurrent.atomic.AtomicLong val$count -> c
     java.lang.Integer val$priority -> e
     java.lang.Thread$UncaughtExceptionHandler val$uncaughtExceptionHandler -> f
     java.util.concurrent.ThreadFactory val$backingThreadFactory -> a
     java.lang.String val$nameFormat -> b
     java.lang.Boolean val$daemon -> d
-com.google.common.util.concurrent.Uninterruptibles -> b.a.c.e.a.j:
+com.google.common.util.concurrent.Uninterruptibles -> b.a.c.e.a.k:
     java.lang.Object getUninterruptibly(java.util.concurrent.Future) -> a
 com.google.firebase.DataCollectionDefaultChange -> b.a.d.a:
     boolean enabled -> a
@@ -20065,19 +20083,51 @@ io.flutter.plugins.firebase.firestore.FlutterFirebaseFirestoreTransactionResult 
     java.lang.Exception exception -> a
     io.flutter.plugins.firebase.firestore.FlutterFirebaseFirestoreTransactionResult complete() -> a
     io.flutter.plugins.firebase.firestore.FlutterFirebaseFirestoreTransactionResult failed(java.lang.Exception) -> a
-io.flutter.plugins.pathprovider.PathProviderPlugin -> io.flutter.plugins.a.a:
+io.flutter.plugins.pathprovider.-$$Lambda$PathProviderPlugin$0ezgzisDVZL6-MIuOApAQeR0qIE -> io.flutter.plugins.a.a:
+    io.flutter.plugins.pathprovider.PathProviderPlugin f$0 -> a
+io.flutter.plugins.pathprovider.-$$Lambda$PathProviderPlugin$2AlcW75sSIWrRCKeD3XqFCfTEFg -> io.flutter.plugins.a.b:
+    io.flutter.plugins.pathprovider.PathProviderPlugin f$0 -> a
+io.flutter.plugins.pathprovider.-$$Lambda$PathProviderPlugin$AWDwT09UE2yjX1t-CivV8M2dsQw -> io.flutter.plugins.a.c:
+    io.flutter.plugins.pathprovider.PathProviderPlugin f$0 -> a
+    java.lang.String f$1 -> b
+io.flutter.plugins.pathprovider.-$$Lambda$PathProviderPlugin$Jxhlq0H6YiJYZdnmNldu4VTAaZ0 -> io.flutter.plugins.a.d:
+    io.flutter.plugins.pathprovider.PathProviderPlugin f$0 -> a
+io.flutter.plugins.pathprovider.-$$Lambda$PathProviderPlugin$YAqYFjJ9PjraJyroxjv4wFjrsFs -> io.flutter.plugins.a.e:
+    io.flutter.plugins.pathprovider.PathProviderPlugin f$0 -> a
+io.flutter.plugins.pathprovider.-$$Lambda$PathProviderPlugin$fS6CedXlEI7Wn0T6xh3Q3f6VDsE -> io.flutter.plugins.a.f:
+    java.util.concurrent.Callable f$1 -> b
+    com.google.common.util.concurrent.SettableFuture f$0 -> a
+io.flutter.plugins.pathprovider.-$$Lambda$PathProviderPlugin$tarQmy0AXgKFg8B5Aioy9praxss -> io.flutter.plugins.a.g:
+    io.flutter.plugins.pathprovider.PathProviderPlugin f$0 -> a
+io.flutter.plugins.pathprovider.PathProviderPlugin -> io.flutter.plugins.a.h:
     android.content.Context context -> a
+    java.util.concurrent.Executor uiThreadExecutor -> c
+    java.util.concurrent.Executor executor -> d
     io.flutter.plugin.common.MethodChannel channel -> b
-    java.lang.String getApplicationSupportDirectory() -> a
-    java.util.List getPathProviderExternalStorageDirectories(java.lang.String) -> a
+    void executeInBackground(java.util.concurrent.Callable,io.flutter.plugin.common.MethodChannel$Result) -> a
+    void lambda$executeInBackground$0(com.google.common.util.concurrent.SettableFuture,java.util.concurrent.Callable) -> a
+    java.lang.String lambda$onMethodCall$1() -> a
+    java.util.List lambda$onMethodCall$5(java.lang.String) -> a
     void onAttachedToEngine(io.flutter.embedding.engine.plugins.FlutterPlugin$FlutterPluginBinding) -> a
     void onMethodCall(io.flutter.plugin.common.MethodCall,io.flutter.plugin.common.MethodChannel$Result) -> a
-    java.lang.String getPathProviderApplicationDocumentsDirectory() -> b
+    java.util.List getPathProviderExternalStorageDirectories(java.lang.String) -> b
+    java.lang.String lambda$onMethodCall$2() -> b
     void onDetachedFromEngine(io.flutter.embedding.engine.plugins.FlutterPlugin$FlutterPluginBinding) -> b
-    java.util.List getPathProviderExternalCacheDirectories() -> c
-    java.lang.String getPathProviderStorageDirectory() -> d
-    java.lang.String getPathProviderTemporaryDirectory() -> e
-io.flutter.plugins.pathprovider.StorageDirectoryMapper -> io.flutter.plugins.a.b:
+    java.lang.String lambda$onMethodCall$3() -> c
+    java.util.List lambda$onMethodCall$4() -> d
+    java.lang.String lambda$onMethodCall$6() -> e
+    java.lang.String getApplicationSupportDirectory() -> f
+    java.lang.String getPathProviderApplicationDocumentsDirectory() -> g
+    java.util.List getPathProviderExternalCacheDirectories() -> h
+    java.lang.String getPathProviderStorageDirectory() -> i
+    java.lang.String getPathProviderTemporaryDirectory() -> j
+io.flutter.plugins.pathprovider.PathProviderPlugin$1 -> io.flutter.plugins.a.h$a:
+    io.flutter.plugin.common.MethodChannel$Result val$result -> a
+    void onFailure(java.lang.Throwable) -> a
+    void onSuccess(java.lang.Object) -> a
+io.flutter.plugins.pathprovider.PathProviderPlugin$UiThreadExecutor -> io.flutter.plugins.a.h$b:
+    android.os.Handler handler -> a
+io.flutter.plugins.pathprovider.StorageDirectoryMapper -> io.flutter.plugins.a.i:
     java.lang.String androidType(java.lang.Integer) -> a
 io.flutter.plugins.sharedpreferences.MethodCallHandlerImpl -> io.flutter.plugins.b.a:
     android.content.SharedPreferences preferences -> a
