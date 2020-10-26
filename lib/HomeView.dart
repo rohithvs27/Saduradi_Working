@@ -73,7 +73,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   },
                 ),
                 body: Container(
-                  color: Colors.white,
                   height: size.height,
                   child: Column(children: <Widget>[
                     Expanded(
@@ -88,15 +87,21 @@ class _MyHomePageState extends State<MyHomePage> {
                               textAlign: TextAlign.center,
                             ),
                           );
-                        return new ListView.builder(
-                            physics: BouncingScrollPhysics(),
+                        return new GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    mainAxisSpacing: 2,
+                                    crossAxisSpacing: 2),
                             itemCount: snapshot.data.documents.length,
                             itemBuilder: (BuildContext context, int index) {
-                              print(snapshot.data.documents[index].id);
+                              // print(snapshot.data.documents[index].id);
                               return Container(
                                 child: Card(
                                   elevation: 10,
-                                  borderOnForeground: false,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
                                   child: Container(
                                     child: ListTile(
                                       contentPadding: EdgeInsets.only(
@@ -108,7 +113,34 @@ class _MyHomePageState extends State<MyHomePage> {
                                             fontWeight: FontWeight.bold,
                                             fontSize: 20),
                                       ),
-                                      // subtitle: Text(snapshot.data.documents[index]),
+                                      subtitle: StreamBuilder(
+                                        stream:
+                                            getProjectDetailsStreamSnapshots(
+                                                context,
+                                                snapshot
+                                                    .data.documents[index].id),
+                                        builder: (context, snapshot) {
+                                          if (!snapshot.hasData)
+                                            return const AlertDialog(
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              content: Text(
+                                                "Loading...",
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            );
+                                          return new Text(
+                                            "Plots # : ${snapshot.data.documents.length}",
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                color: snapshot.data.documents
+                                                            .length ==
+                                                        0
+                                                    ? Colors.red
+                                                    : Colors.green),
+                                          );
+                                        },
+                                      ),
                                       onTap: () {
                                         Navigator.push(
                                             context,
@@ -134,7 +166,6 @@ class _MyHomePageState extends State<MyHomePage> {
             : Scaffold(
                 appBar: customAppbar(context, widget.promotorName),
                 body: Container(
-                  color: Colors.white,
                   height: size.height,
                   child: Column(children: <Widget>[
                     Expanded(
@@ -149,15 +180,21 @@ class _MyHomePageState extends State<MyHomePage> {
                               textAlign: TextAlign.center,
                             ),
                           );
-                        return new ListView.builder(
-                            physics: BouncingScrollPhysics(),
+                        return new GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    mainAxisSpacing: 2,
+                                    crossAxisSpacing: 2),
                             itemCount: snapshot.data.documents.length,
                             itemBuilder: (BuildContext context, int index) {
-                              print(snapshot.data.documents[index].id);
+                              // print(snapshot.data.documents[index].id);
                               return Container(
                                 child: Card(
                                   elevation: 10,
-                                  borderOnForeground: false,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
                                   child: Container(
                                     child: ListTile(
                                       contentPadding: EdgeInsets.only(
@@ -169,7 +206,34 @@ class _MyHomePageState extends State<MyHomePage> {
                                             fontWeight: FontWeight.bold,
                                             fontSize: 20),
                                       ),
-                                      // subtitle: Text(snapshot.data.documents[index]),
+                                      subtitle: StreamBuilder(
+                                        stream:
+                                            getProjectDetailsStreamSnapshots(
+                                                context,
+                                                snapshot
+                                                    .data.documents[index].id),
+                                        builder: (context, snapshot) {
+                                          if (!snapshot.hasData)
+                                            return const AlertDialog(
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              content: Text(
+                                                "Loading...",
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            );
+                                          return new Text(
+                                            "Plots # : ${snapshot.data.documents.length}",
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                color: snapshot.data.documents
+                                                            .length ==
+                                                        0
+                                                    ? Colors.red
+                                                    : Colors.green),
+                                          );
+                                        },
+                                      ),
                                       onTap: () {
                                         Navigator.push(
                                             context,
@@ -264,6 +328,30 @@ class _MyHomePageState extends State<MyHomePage> {
         .collection(widget.promotorName)
         .doc("Projects")
         .collection("projectlist")
+        .snapshots();
+  }
+
+  Stream<QuerySnapshot> getProjectDetailsStreamSnapshots(
+      BuildContext context, String projectId) async* {
+    yield* FirebaseFirestore.instance
+        .collection(widget.promotorName)
+        .doc("Projects")
+        .collection("projectlist")
+        .doc(projectId)
+        .collection("plots")
+        .where("isbooked", isEqualTo: false)
+        .snapshots();
+  }
+
+  getProjectDetailsfutureSnapshots(projectId) {
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection(widget.promotorName);
+    return collectionReference
+        .doc("Projects")
+        .collection("projectlist")
+        .doc(projectId)
+        .collection("plots")
+        .where("isbooked", isEqualTo: false)
         .snapshots();
   }
 }
