@@ -44,6 +44,7 @@ class _SplashState extends State<Splash> with AfterLayoutMixin<Splash> {
     admin = prefs.getBool('admin');
     String empname = prefs.get('empname');
     String promotorname = prefs.get('promotorname');
+    print(uid);
 
     if (uid == null) {
       Navigator.of(context).pushReplacement(

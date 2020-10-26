@@ -24,41 +24,27 @@ class _MyHomePageState extends State<MyHomePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _projectnamecontroller = TextEditingController();
   GetPlotFilterCount getCount = new GetPlotFilterCount();
-  ScrollController controller = ScrollController();
-  bool closeTopContainer = false;
-  double topContainer = 0;
-  Map<String, dynamic> data1 = {
-    "plotname": 1,
-    "area": "1234",
-    "isbooked": false,
-    "registrationComplete": false
-  };
-  String docid = "KPM";
 
-  get_promotorName() {
-    DocumentReference documentReference =
-        FirebaseFirestore.instance.collection('data').doc(widget.uid);
-    documentReference.snapshots().listen((snapshot) {
-      setState(() {
-        promotor_name = snapshot.get("promotor_name");
-      });
-    });
-  }
-
-  void _incrementTab(index) {
+  void _selectedTab(index) {
     setState(() {
       _cIndex = index;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    //get_promotorName();
-    controller.addListener(() {
-      setState(() {
-        closeTopContainer = controller.offset > 50;
-      });
+      print(_cIndex);
+      switch (_cIndex) {
+        case 0:
+          {
+            addnewproject();
+            _projectnamecontroller.clear();
+          }
+          break;
+        case 1:
+          {
+            Navigator.push(
+                context,
+                new MaterialPageRoute(
+                    builder: (context) => CreateNewEmp(widget.promotorName)));
+          }
+          break;
+      }
     });
   }
 
@@ -69,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: widget.admin
             ? Scaffold(
                 appBar: customAppbar(context, widget.promotorName),
-                floatingActionButton: FloatingActionButton(
+                /*floatingActionButton: FloatingActionButton(
                   tooltip: "Add Project",
                   backgroundColor: Colors.white,
                   foregroundColor: Colors.red[900],
@@ -80,10 +66,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     });
                   },
                   child: Icon(Icons.add),
-                ),
+                ),*/
                 bottomNavigationBar: widget.admin
                     ? BottomNavigationBar(
-                        backgroundColor: Colors.blueAccent,
+                        backgroundColor: Colors.white,
                         currentIndex: _cIndex,
                         items: const <BottomNavigationBarItem>[
                           BottomNavigationBarItem(
@@ -93,14 +79,10 @@ class _MyHomePageState extends State<MyHomePage> {
                               icon: Icon(Icons.person_add),
                               title: Text("Add Employee")),
                         ],
-                        selectedItemColor: Colors.amber[800],
+                        selectedItemColor: Colors.blue[800],
+                        unselectedItemColor: Colors.blue[800],
                         onTap: (index) {
-                          _incrementTab(index);
-                          Navigator.push(
-                              context,
-                              new MaterialPageRoute(
-                                  builder: (context) =>
-                                      CreateNewEmp(widget.promotorName)));
+                          _selectedTab(index);
                         },
                       )
                     : Container(),
@@ -126,17 +108,13 @@ class _MyHomePageState extends State<MyHomePage> {
                             itemBuilder: (BuildContext context, int index) {
                               print(snapshot.data.documents[index].id);
                               return Container(
-                                height: 75,
                                 child: Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15.0),
-                                    ),
-                                    shadowColor: Colors.black,
-                                    color: Colors.grey[200],
-                                    elevation: 5,
+                                  elevation: 10,
+                                  borderOnForeground: false,
+                                  child: Container(
                                     child: ListTile(
-                                      contentPadding:
-                                          EdgeInsets.only(left: 20, top: 5),
+                                      contentPadding: EdgeInsets.only(
+                                          left: 20, top: 5, bottom: 5),
                                       title: Text(
                                         snapshot.data.documents[index].id
                                             .toString(),
@@ -156,7 +134,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     widget.admin,
                                                     widget.empname)));
                                       },
-                                    )),
+                                    ),
+                                  ),
+                                ),
                               );
                             });
                       },

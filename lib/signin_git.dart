@@ -20,18 +20,17 @@ class _SignInPageState extends State<SignInPage> {
     return SafeArea(child: Scaffold(
       body: Builder(builder: (BuildContext context) {
         return Container(
-          child: Card(
-            color: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-            child: ListView(
-              padding: EdgeInsets.all(8),
-              scrollDirection: Axis.vertical,
-              children: <Widget>[
-                _EmailPasswordForm(),
-              ],
-            ),
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Colors.white, Colors.white10])),
+          child: ListView(
+            padding: EdgeInsets.all(8),
+            scrollDirection: Axis.vertical,
+            children: <Widget>[
+              _EmailPasswordForm(),
+            ],
           ),
         );
       }),
@@ -61,20 +60,25 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              SizedBox(
-                height: 90,
+              Text(
+                "Saduradi",
+                style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 23,
+                    color: Colors.red[900]),
               ),
-              Center(
-                  child: Icon(Icons.person, size: 50, color: Colors.red[900])),
               SizedBox(
-                height: 30,
+                height: 20,
               ),
               Container(
                 child: const Text(
                   'Sign in',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 40,
+                      color: Colors.black),
                 ),
-                alignment: Alignment.center,
+                alignment: Alignment.centerLeft,
               ),
               SizedBox(
                 height: 15,

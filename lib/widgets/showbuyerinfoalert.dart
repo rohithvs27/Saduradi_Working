@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 Widget showbuyerinfoalert(var buyerinfo) {
+  double fontsize = 18;
   Color showinfo = Colors.black;
   var date = DateTime.fromMillisecondsSinceEpoch(
       buyerinfo['bookingdate'].millisecondsSinceEpoch);
@@ -12,17 +13,6 @@ Widget showbuyerinfoalert(var buyerinfo) {
           //scrollDirection: Axis.vertical,
           children: <Widget>[
             Column(children: <Widget>[
-              Container(
-                child: Center(
-                  child: Text(
-                    "Verify Registration",
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
               Container(
                 alignment: Alignment.topLeft,
                 width: double.infinity,
@@ -41,7 +31,7 @@ Widget showbuyerinfoalert(var buyerinfo) {
                         buyerinfo["plotname"].toString(),
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 23,
+                            fontSize: fontsize,
                             color: showinfo,
                             fontWeight: FontWeight.bold),
                       ),
@@ -67,7 +57,7 @@ Widget showbuyerinfoalert(var buyerinfo) {
                         buyerinfo["area"] + " " + "sq.ft",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 23,
+                            fontSize: fontsize,
                             color: showinfo,
                             fontWeight: FontWeight.bold),
                       ),
@@ -93,7 +83,7 @@ Widget showbuyerinfoalert(var buyerinfo) {
                         buyerinfo["buyername"],
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 23,
+                            fontSize: fontsize,
                             color: showinfo,
                             fontWeight: FontWeight.bold),
                       ),
@@ -119,7 +109,7 @@ Widget showbuyerinfoalert(var buyerinfo) {
                         buyerinfo["buyerphonenumber"],
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 23,
+                            fontSize: fontsize,
                             color: showinfo,
                             fontWeight: FontWeight.bold),
                       ),
@@ -145,7 +135,7 @@ Widget showbuyerinfoalert(var buyerinfo) {
                         buyerinfo["bookingamount"],
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 23,
+                            fontSize: fontsize,
                             color: showinfo,
                             fontWeight: FontWeight.bold),
                       ),
@@ -171,7 +161,7 @@ Widget showbuyerinfoalert(var buyerinfo) {
                         buyerinfo["bookingperson"],
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 23,
+                            fontSize: fontsize,
                             color: showinfo,
                             fontWeight: FontWeight.bold),
                       ),
@@ -197,7 +187,7 @@ Widget showbuyerinfoalert(var buyerinfo) {
                         formatter.format(date),
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 23,
+                            fontSize: fontsize,
                             color: showinfo,
                             fontWeight: FontWeight.bold),
                       ),

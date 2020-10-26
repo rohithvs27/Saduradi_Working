@@ -1,8 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:saduradi_phone_signin/HomeView.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 FirebaseAuthException authException;
@@ -225,7 +223,11 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
       Scaffold.of(context).showSnackBar(SnackBar(
         content: Text("${user.email} created successfully"),
       ));
-      Navigator.pop(context);
+      _emailController.clear();
+      _passwordController.clear();
+      _nameController.clear();
+
+      //Navigator.pop(context);
     } catch (e) {
       authException = e;
       Scaffold.of(context).showSnackBar(SnackBar(

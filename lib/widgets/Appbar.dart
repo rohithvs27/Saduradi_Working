@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
 
 import '../signin_git.dart';
 
@@ -9,26 +10,30 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
 
 Widget customAppbar(context, name) {
   void _signOut() async {
-    await _auth.signOut();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove('uid');
-    prefs.remove('admin');
-    prefs.remove('promotorname');
-    Navigator.pushAndRemoveUntil(
-        context,
-        new MaterialPageRoute(builder: (context) => SignInPage()),
-        (route) => false);
+    await _auth.signOut().then((value) async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.remove('uid');
+      prefs.remove('admin');
+      prefs.remove('promotorname');
+      Navigator.pushAndRemoveUntil(
+          context,
+          new MaterialPageRoute(builder: (context) => SignInPage()),
+          (route) => false);
+    });
   }
 
-  return AppBar(
+  return GradientAppBar(
     centerTitle: true,
-    backgroundColor: Colors.white,
+    gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [Colors.red[900], Colors.red[900]]),
     title: Text(
       name.toString(),
       textAlign: TextAlign.center,
       style: GoogleFonts.poppins(
           textStyle: Theme.of(context).textTheme.headline4,
-          color: Colors.red[900],
+          color: Colors.white,
           fontSize: 25,
           fontWeight: FontWeight.w700,
           fontStyle: FontStyle.normal),

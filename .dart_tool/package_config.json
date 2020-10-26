@@ -194,6 +194,12 @@
       "languageVersion": "2.3"
     },
     {
+      "name": "gradient_app_bar",
+      "rootUri": "file:///Users/rohith/tools/flutter/.pub-cache/hosted/pub.dartlang.org/gradient_app_bar-0.1.3",
+      "packageUri": "lib/",
+      "languageVersion": "1.19"
+    },
+    {
       "name": "http",
       "rootUri": "file:///Users/rohith/tools/flutter/.pub-cache/hosted/pub.dartlang.org/http-0.12.2",
       "packageUri": "lib/",
@@ -428,7 +434,7 @@
       "languageVersion": "2.7"
     }
   ],
-  "generated": "2020-10-15T04:44:10.424137Z",
+  "generated": "2020-10-25T17:25:25.262235Z",
   "generator": "pub",
   "generatorVersion": "2.9.2"
 }
