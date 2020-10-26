@@ -4,7 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 FirebaseAuthException authException;
-String PromName;
+String promName;
+String tempPassword = "password";
 
 /// Entrypoint example for various sign-in flows with Firebase.
 class CreateNewEmp extends StatefulWidget {
@@ -19,7 +20,7 @@ class _CreateNewEmpState extends State<CreateNewEmp> {
   @override
   void initState() {
     super.initState();
-    PromName = widget.promotorname;
+    promName = widget.promotorname;
   }
 
   @override
@@ -27,18 +28,12 @@ class _CreateNewEmpState extends State<CreateNewEmp> {
     return SafeArea(child: Scaffold(
       body: Builder(builder: (BuildContext context) {
         return Container(
-          child: Card(
-            color: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-            child: ListView(
-              padding: EdgeInsets.all(8),
-              scrollDirection: Axis.vertical,
-              children: <Widget>[
-                _EmailPasswordForm(),
-              ],
-            ),
+          child: ListView(
+            padding: EdgeInsets.all(8),
+            scrollDirection: Axis.vertical,
+            children: <Widget>[
+              _EmailPasswordForm(),
+            ],
           ),
         );
       }),
@@ -119,7 +114,7 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
                   return null;
                 },
               ),
-              SizedBox(
+              /* SizedBox(
                 height: 5,
               ),
               TextFormField(
@@ -137,35 +132,7 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
                 },
                 obscureText: true,
               ),
-              /*Center(
-                child: FlatButton(
-                    child: Text(
-                      "Forgot Password/Reset Password",
-                      style: TextStyle(color: Colors.red[900]),
-                    ),
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (_) => AlertDialog(
-                                content: resetpasswordalert(),
-                                actions: [
-                                  FlatButton(
-                                    child: Text(
-                                      "Reset",
-                                      style: TextStyle(color: Colors.red[900]),
-                                    ),
-                                    onPressed: () {
-                                      if (_resetformKey.currentState
-                                          .validate()) {
-                                        resetPassword(
-                                            _emailController.text.trim());
-                                      }
-                                    },
-                                  )
-                                ],
-                              ));
-                    }),
-              ),*/
+              */
               Container(
                 padding: const EdgeInsets.only(top: 16.0),
                 alignment: Alignment.center,
@@ -209,20 +176,18 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
     try {
       final User user = (await _auth.createUserWithEmailAndPassword(
         email: _emailController.text.trim(),
-        password: _passwordController.text,
+        password: tempPassword,
       ))
           .user;
 
       DocumentReference documentReference =
-          FirebaseFirestore.instance.collection(PromName).doc("Users");
+          FirebaseFirestore.instance.collection(promName).doc("Users");
       documentReference
           .collection("usercollection")
           .doc(user.uid)
           .set({'name': _nameController.text.trim(), 'isAdmin': false});
 
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text("${user.email} created successfully"),
-      ));
+      resetPassword(_emailController.text.trim());
       _emailController.clear();
       _passwordController.clear();
       _nameController.clear();
@@ -241,62 +206,14 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
     try {
       await _auth.sendPasswordResetEmail(email: email);
       Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text("Please check you email for password reset link"),
+        content: Text("Password reset link sent to $email"),
       ));
-      Navigator.pop(context);
     } catch (e) {
       authException = e;
-      print(authException.message);
       Scaffold.of(context).showSnackBar(SnackBar(
         content: Text(authException.message),
       ));
     }
-  }
-
-  Widget resetpasswordalert() {
-    return Container(
-      width: double.maxFinite,
-      child: ListView(
-        shrinkWrap: true,
-        padding: EdgeInsets.only(top: 10),
-        scrollDirection: Axis.vertical,
-        children: <Widget>[
-          Center(
-              child: Column(
-            children: <Widget>[
-              Text(
-                "Reset Password",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              Form(
-                key: _resetformKey,
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      controller: _emailController,
-                      decoration: const InputDecoration(
-                        labelText: 'Reset password',
-                        prefixIcon: Icon(Icons.email),
-                      ),
-                      validator: (String value) {
-                        if (value.isEmpty) return 'Please enter some text';
-                        return null;
-                      },
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ))
-        ],
-      ),
-    );
   }
 
   // Example code of how to sign in with email and password.

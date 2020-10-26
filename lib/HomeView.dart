@@ -55,37 +55,23 @@ class _MyHomePageState extends State<MyHomePage> {
         child: widget.admin
             ? Scaffold(
                 appBar: customAppbar(context, widget.promotorName),
-                /*floatingActionButton: FloatingActionButton(
-                  tooltip: "Add Project",
+                bottomNavigationBar: BottomNavigationBar(
                   backgroundColor: Colors.white,
-                  foregroundColor: Colors.red[900],
-                  onPressed: () {
-                    setState(() {
-                      addnewproject();
-                      _projectnamecontroller.clear();
-                    });
+                  currentIndex: _cIndex,
+                  items: const <BottomNavigationBarItem>[
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.business), title: Text("Add Project")),
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.person_add),
+                        title: Text("Manage Employee")),
+                  ],
+                  selectedItemColor: Colors.blue[800],
+                  unselectedItemColor: Colors.blue[800],
+                  unselectedFontSize: 14,
+                  onTap: (index) {
+                    _selectedTab(index);
                   },
-                  child: Icon(Icons.add),
-                ),*/
-                bottomNavigationBar: widget.admin
-                    ? BottomNavigationBar(
-                        backgroundColor: Colors.white,
-                        currentIndex: _cIndex,
-                        items: const <BottomNavigationBarItem>[
-                          BottomNavigationBarItem(
-                              icon: Icon(Icons.business),
-                              title: Text("Add Project")),
-                          BottomNavigationBarItem(
-                              icon: Icon(Icons.person_add),
-                              title: Text("Add Employee")),
-                        ],
-                        selectedItemColor: Colors.blue[800],
-                        unselectedItemColor: Colors.blue[800],
-                        onTap: (index) {
-                          _selectedTab(index);
-                        },
-                      )
-                    : Container(),
+                ),
                 body: Container(
                   color: Colors.white,
                   height: size.height,
@@ -122,6 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                             fontWeight: FontWeight.bold,
                                             fontSize: 20),
                                       ),
+                                      // subtitle: Text(snapshot.data.documents[index]),
                                       onTap: () {
                                         Navigator.push(
                                             context,
@@ -168,17 +155,13 @@ class _MyHomePageState extends State<MyHomePage> {
                             itemBuilder: (BuildContext context, int index) {
                               print(snapshot.data.documents[index].id);
                               return Container(
-                                height: 75,
                                 child: Card(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15.0),
-                                    ),
-                                    shadowColor: Colors.black,
-                                    color: Colors.grey[200],
-                                    elevation: 5,
+                                  elevation: 10,
+                                  borderOnForeground: false,
+                                  child: Container(
                                     child: ListTile(
-                                      contentPadding:
-                                          EdgeInsets.only(left: 20, top: 5),
+                                      contentPadding: EdgeInsets.only(
+                                          left: 20, top: 5, bottom: 5),
                                       title: Text(
                                         snapshot.data.documents[index].id
                                             .toString(),
@@ -186,6 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                             fontWeight: FontWeight.bold,
                                             fontSize: 20),
                                       ),
+                                      // subtitle: Text(snapshot.data.documents[index]),
                                       onTap: () {
                                         Navigator.push(
                                             context,
@@ -198,7 +182,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     widget.admin,
                                                     widget.empname)));
                                       },
-                                    )),
+                                    ),
+                                  ),
+                                ),
                               );
                             });
                       },

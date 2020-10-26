@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       title: 'Saduradi',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.red,
         visualDensity: VisualDensity.adaptivePlatformDensity,
         textTheme: GoogleFonts.latoTextTheme(
           Theme.of(context).textTheme,
