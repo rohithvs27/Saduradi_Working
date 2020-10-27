@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:saduradi_phone_signin/widgets/Appbar.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 FirebaseAuthException authException;
@@ -25,7 +26,9 @@ class _CreateNewEmpState extends State<CreateNewEmp> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child: Scaffold(
+    return SafeArea(
+        child: Scaffold(
+      appBar: customAppbar(context, "Manage Users"),
       body: Builder(builder: (BuildContext context) {
         return Container(
           child: ListView(
@@ -63,14 +66,6 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              SizedBox(
-                height: 90,
-              ),
-              Center(
-                  child: Icon(Icons.person, size: 50, color: Colors.red[900])),
-              SizedBox(
-                height: 30,
-              ),
               Container(
                 child: const Text(
                   'Add Employee',
@@ -88,7 +83,7 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
                   labelText: 'Email',
                   prefixIcon: Icon(
                     Icons.email,
-                    color: Colors.red[900],
+                    color: Colors.blue,
                   ),
                 ),
                 validator: (String value) {
@@ -106,7 +101,7 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
                   labelText: 'Name',
                   prefixIcon: Icon(
                     Icons.person_pin,
-                    color: Colors.red[900],
+                    color: Colors.blue,
                   ),
                 ),
                 validator: (String value) {
@@ -137,11 +132,11 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
                 padding: const EdgeInsets.only(top: 16.0),
                 alignment: Alignment.center,
                 child: MaterialButton(
-                  color: Colors.grey[200],
+                  color: Colors.white,
                   child: Text(
                     "Create User",
                     style: TextStyle(
-                        color: Colors.red[900],
+                        color: Colors.indigo,
                         fontWeight: FontWeight.bold,
                         fontSize: 16),
                   ),
@@ -149,7 +144,7 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
                   minWidth: 140,
                   shape: RoundedRectangleBorder(
                       side: BorderSide(
-                          color: Colors.red[900],
+                          color: Colors.indigo,
                           width: 1,
                           style: BorderStyle.solid),
                       borderRadius: BorderRadius.circular(40.0)),

@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:saduradi_phone_signin/plotnames.dart';
+import 'package:saduradi_phone_signin/reportscreen.dart';
 import 'package:saduradi_phone_signin/services/filterdata.dart';
 import 'package:saduradi_phone_signin/widgets/Appbar.dart';
 import 'package:saduradi_phone_signin/widgets/createnewemp.dart';
 
 var promotor_name = "Loading...";
 var plotcount;
+FirebaseFirestore firestore = FirebaseFirestore.instance;
 
 class MyHomePage extends StatefulWidget {
   final bool admin;
@@ -26,26 +28,29 @@ class _MyHomePageState extends State<MyHomePage> {
   GetPlotFilterCount getCount = new GetPlotFilterCount();
 
   void _selectedTab(index) {
-    setState(() {
-      _cIndex = index;
-      print(_cIndex);
-      switch (_cIndex) {
-        case 0:
-          {
-            addnewproject();
-            _projectnamecontroller.clear();
-          }
-          break;
-        case 1:
-          {
-            Navigator.push(
-                context,
-                new MaterialPageRoute(
-                    builder: (context) => CreateNewEmp(widget.promotorName)));
-          }
-          break;
-      }
-    });
+    _cIndex = index;
+    print(_cIndex);
+    switch (_cIndex) {
+      case 0:
+        {
+          addnewproject();
+          _projectnamecontroller.clear();
+        }
+        break;
+      case 1:
+        {
+          Navigator.push(
+              context,
+              new MaterialPageRoute(
+                  builder: (context) => CreateNewEmp(widget.promotorName)));
+        }
+        break;
+      case 2:
+        {
+          //T0do
+        }
+        break;
+    }
   }
 
   @override
@@ -56,18 +61,25 @@ class _MyHomePageState extends State<MyHomePage> {
             ? Scaffold(
                 appBar: customAppbar(context, widget.promotorName),
                 bottomNavigationBar: BottomNavigationBar(
-                  backgroundColor: Colors.white,
                   currentIndex: _cIndex,
-                  items: const <BottomNavigationBarItem>[
+                  items: [
                     BottomNavigationBarItem(
-                        icon: Icon(Icons.business), title: Text("Add Project")),
+                      icon: Icon(Icons.business),
+                      title: Text("Add Project"),
+                    ),
                     BottomNavigationBarItem(
-                        icon: Icon(Icons.person_add),
-                        title: Text("Manage Employee")),
+                      icon: Icon(Icons.person_add),
+                      title: Text("Add Employee"),
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.receipt),
+                      title: Text("Reports"),
+                    ),
                   ],
-                  selectedItemColor: Colors.blue[800],
-                  unselectedItemColor: Colors.blue[800],
-                  unselectedFontSize: 14,
+                  showUnselectedLabels: true,
+                  selectedItemColor: Colors.indigo,
+                  unselectedItemColor: Colors.indigo,
+                  selectedFontSize: 12,
                   onTap: (index) {
                     _selectedTab(index);
                   },
@@ -82,81 +94,118 @@ class _MyHomePageState extends State<MyHomePage> {
                         if (!snapshot.hasData)
                           return const AlertDialog(
                             backgroundColor: Colors.transparent,
-                            content: Text(
-                              "Loading...",
-                              textAlign: TextAlign.center,
-                            ),
+                            content: LinearProgressIndicator(),
                           );
-                        return new GridView.builder(
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    mainAxisSpacing: 2,
-                                    crossAxisSpacing: 2),
+                        return new ListView.builder(
+                            physics: const BouncingScrollPhysics(
+                                parent: AlwaysScrollableScrollPhysics()),
                             itemCount: snapshot.data.documents.length,
                             itemBuilder: (BuildContext context, int index) {
                               // print(snapshot.data.documents[index].id);
                               return Container(
+                                  child: InkWell(
                                 child: Card(
-                                  elevation: 10,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: Container(
-                                    child: ListTile(
-                                      contentPadding: EdgeInsets.only(
-                                          left: 20, top: 5, bottom: 5),
-                                      title: Text(
-                                        snapshot.data.documents[index].id
-                                            .toString(),
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20),
-                                      ),
-                                      subtitle: StreamBuilder(
-                                        stream:
-                                            getProjectDetailsStreamSnapshots(
-                                                context,
+                                    elevation: 10,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                            width: size.width * 0.7,
+                                            padding: EdgeInsets.all(20),
+                                            child: Text(
                                                 snapshot
-                                                    .data.documents[index].id),
-                                        builder: (context, snapshot) {
-                                          if (!snapshot.hasData)
-                                            return const AlertDialog(
-                                              backgroundColor:
-                                                  Colors.transparent,
-                                              content: Text(
-                                                "Loading...",
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            );
-                                          return new Text(
-                                            "Plots # : ${snapshot.data.documents.length}",
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                color: snapshot.data.documents
-                                                            .length ==
-                                                        0
-                                                    ? Colors.red
-                                                    : Colors.green),
-                                          );
-                                        },
-                                      ),
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            new MaterialPageRoute(
-                                                builder: (context) => PlotNames(
-                                                    widget.promotorName,
-                                                    widget.uid,
+                                                    .data.documents[index].id,
+                                                style: TextStyle(
+                                                  fontSize: 25,
+                                                ))),
+                                        Container(
+                                          width: size.width * 0.13,
+                                          child: FutureBuilder<QuerySnapshot>(
+                                            future:
+                                                getProjectDetailsfutureSnapshots(
                                                     snapshot.data
                                                         .documents[index].id,
-                                                    widget.admin,
-                                                    widget.empname)));
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              );
+                                                    false),
+                                            builder: (BuildContext context,
+                                                snapshot) {
+                                              if (snapshot.hasData) {
+                                                if (snapshot.connectionState ==
+                                                    ConnectionState.waiting) {
+                                                  return Center(
+                                                    child:
+                                                        LinearProgressIndicator(),
+                                                  );
+                                                } else {
+                                                  return Center(
+                                                      // here only return is missing
+                                                      child: Text(
+                                                    snapshot.data.docs.length
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color:
+                                                            Colors.green[800]),
+                                                  ));
+                                                }
+                                              } else if (snapshot.hasError) {
+                                                Text('no data');
+                                              }
+                                              return LinearProgressIndicator();
+                                            },
+                                          ),
+                                        ),
+                                        Container(
+                                          width: size.width * 0.13,
+                                          child: FutureBuilder<QuerySnapshot>(
+                                            future:
+                                                getProjectDetailsfutureSnapshots(
+                                                    snapshot.data
+                                                        .documents[index].id,
+                                                    true),
+                                            builder: (BuildContext context,
+                                                snapshot) {
+                                              if (snapshot.hasData) {
+                                                if (snapshot.connectionState ==
+                                                    ConnectionState.waiting) {
+                                                  return LinearProgressIndicator();
+                                                } else {
+                                                  return Center(
+                                                      // here only return is missing
+                                                      child: Text(
+                                                    snapshot.data.docs.length
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.red[800]),
+                                                  ));
+                                                }
+                                              } else if (snapshot.hasError) {
+                                                Text('no data');
+                                              }
+                                              return LinearProgressIndicator();
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    )),
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) => PlotNames(
+                                              widget.promotorName,
+                                              widget.uid,
+                                              snapshot.data.documents[index].id,
+                                              widget.admin,
+                                              widget.empname)));
+                                },
+                              ));
                             });
                       },
                     )),
@@ -174,82 +223,123 @@ class _MyHomePageState extends State<MyHomePage> {
                       builder: (context, snapshot) {
                         if (!snapshot.hasData)
                           return const AlertDialog(
-                            backgroundColor: Colors.transparent,
-                            content: Text(
-                              "Loading...",
-                              textAlign: TextAlign.center,
-                            ),
-                          );
-                        return new GridView.builder(
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    mainAxisSpacing: 2,
-                                    crossAxisSpacing: 2),
+                              backgroundColor: Colors.transparent,
+                              content: LinearProgressIndicator());
+                        return new ListView.builder(
+                            physics: const BouncingScrollPhysics(
+                                parent: AlwaysScrollableScrollPhysics()),
                             itemCount: snapshot.data.documents.length,
                             itemBuilder: (BuildContext context, int index) {
                               // print(snapshot.data.documents[index].id);
                               return Container(
+                                  child: InkWell(
                                 child: Card(
-                                  elevation: 10,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: Container(
-                                    child: ListTile(
-                                      contentPadding: EdgeInsets.only(
-                                          left: 20, top: 5, bottom: 5),
-                                      title: Text(
-                                        snapshot.data.documents[index].id
-                                            .toString(),
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20),
-                                      ),
-                                      subtitle: StreamBuilder(
-                                        stream:
-                                            getProjectDetailsStreamSnapshots(
-                                                context,
+                                    elevation: 10,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                            width: size.width * 0.7,
+                                            padding: EdgeInsets.all(20),
+                                            child: Text(
                                                 snapshot
-                                                    .data.documents[index].id),
-                                        builder: (context, snapshot) {
-                                          if (!snapshot.hasData)
-                                            return const AlertDialog(
-                                              backgroundColor:
-                                                  Colors.transparent,
-                                              content: Text(
-                                                "Loading...",
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            );
-                                          return new Text(
-                                            "Plots # : ${snapshot.data.documents.length}",
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                color: snapshot.data.documents
-                                                            .length ==
-                                                        0
-                                                    ? Colors.red
-                                                    : Colors.green),
-                                          );
-                                        },
-                                      ),
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            new MaterialPageRoute(
-                                                builder: (context) => PlotNames(
-                                                    widget.promotorName,
-                                                    widget.uid,
+                                                    .data.documents[index].id,
+                                                style: TextStyle(
+                                                  fontSize: 25,
+                                                ))),
+                                        Container(
+                                          width: size.width * 0.13,
+                                          child: FutureBuilder<QuerySnapshot>(
+                                            future:
+                                                getProjectDetailsfutureSnapshots(
                                                     snapshot.data
                                                         .documents[index].id,
-                                                    widget.admin,
-                                                    widget.empname)));
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              );
+                                                    false),
+                                            builder: (BuildContext context,
+                                                snapshot) {
+                                              if (snapshot.hasData) {
+                                                if (snapshot.connectionState ==
+                                                    ConnectionState.waiting) {
+                                                  return Center(
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      strokeWidth: 0.5,
+                                                    ),
+                                                  );
+                                                } else {
+                                                  return Center(
+                                                      // here only return is missing
+                                                      child: Text(
+                                                    snapshot.data.docs.length
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color:
+                                                            Colors.green[800]),
+                                                  ));
+                                                }
+                                              } else if (snapshot.hasError) {
+                                                Text('no data');
+                                              }
+                                              return CircularProgressIndicator();
+                                            },
+                                          ),
+                                        ),
+                                        Container(
+                                          width: size.width * 0.13,
+                                          child: FutureBuilder<QuerySnapshot>(
+                                            future:
+                                                getProjectDetailsfutureSnapshots(
+                                                    snapshot.data
+                                                        .documents[index].id,
+                                                    true),
+                                            builder: (BuildContext context,
+                                                snapshot) {
+                                              if (snapshot.hasData) {
+                                                if (snapshot.connectionState ==
+                                                    ConnectionState.waiting) {
+                                                  return Center(
+                                                    child:
+                                                        CircularProgressIndicator(),
+                                                  );
+                                                } else {
+                                                  return Center(
+                                                      // here only return is missing
+                                                      child: Text(
+                                                    snapshot.data.docs.length
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.red[800]),
+                                                  ));
+                                                }
+                                              } else if (snapshot.hasError) {
+                                                Text('no data');
+                                              }
+                                              return CircularProgressIndicator();
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    )),
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      new MaterialPageRoute(
+                                          builder: (context) => PlotNames(
+                                              widget.promotorName,
+                                              widget.uid,
+                                              snapshot.data.documents[index].id,
+                                              widget.admin,
+                                              widget.empname)));
+                                },
+                              ));
                             });
                       },
                     )),
@@ -300,9 +390,27 @@ class _MyHomePageState extends State<MyHomePage> {
                         ]))
                       ])),
               actions: <Widget>[
-                FlatButton(
-                  color: Colors.green,
-                  child: Text('Submit'),
+                MaterialButton(
+                  color: Colors.white,
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(
+                        color: Colors.red, fontWeight: FontWeight.bold),
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                MaterialButton(
+                  color: Colors.white,
+                  child: Text(
+                    'Submit',
+                    style: TextStyle(
+                        color: Colors.green, fontWeight: FontWeight.bold),
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18.0),
                   ),
@@ -343,15 +451,15 @@ class _MyHomePageState extends State<MyHomePage> {
         .snapshots();
   }
 
-  getProjectDetailsfutureSnapshots(projectId) {
-    CollectionReference collectionReference =
-        FirebaseFirestore.instance.collection(widget.promotorName);
-    return collectionReference
+  Future<QuerySnapshot> getProjectDetailsfutureSnapshots(
+      projectId, bookedstatus) async {
+    return await firestore
+        .collection(widget.promotorName)
         .doc("Projects")
         .collection("projectlist")
         .doc(projectId)
         .collection("plots")
-        .where("isbooked", isEqualTo: false)
-        .snapshots();
+        .where("isbooked", isEqualTo: bookedstatus)
+        .get();
   }
 }

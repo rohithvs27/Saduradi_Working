@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:gradient_app_bar/gradient_app_bar.dart';
 
 import '../signin_git.dart';
 
@@ -22,12 +21,9 @@ Widget customAppbar(context, name) {
     });
   }
 
-  return GradientAppBar(
+  return AppBar(
     centerTitle: true,
-    gradient: LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [Colors.red[900], Colors.red[900]]),
+    backgroundColor: Colors.indigo,
     title: Text(
       name.toString(),
       textAlign: TextAlign.center,

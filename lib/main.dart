@@ -5,11 +5,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:saduradi_phone_signin/HomeView.dart';
 import 'package:saduradi_phone_signin/signin_git.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(new MyApp());
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(new MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {

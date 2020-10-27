@@ -1,4 +1,4 @@
-#Mon Oct 26 16:00:14 IST 2020
+#Mon Oct 26 22:44:16 IST 2020
 base.0=/Users/rohith/AndroidStudioProjects/saduradi_phone_signin/build/app/intermediates/transforms/r8/release/0/classes.dex
 path.0=classes.dex
 renamed.0=classes.dex

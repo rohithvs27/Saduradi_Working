@@ -127,7 +127,15 @@ Widget showbuyerinfoalert(var buyerinfo) {
                     borderRadius: BorderRadius.all(Radius.circular(10.0))),
                 child: Row(
                   children: [
-                    Icon(Icons.attach_money),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 6, top: 6),
+                      child: Text(
+                        '\u{20B9}',
+                        style: TextStyle(
+                          fontSize: 32,
+                        ),
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(10),
                       //padding: const EdgeInsets.all(20),

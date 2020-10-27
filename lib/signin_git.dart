@@ -65,7 +65,7 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
                 style: TextStyle(
                     fontWeight: FontWeight.w900,
                     fontSize: 23,
-                    color: Colors.red[900]),
+                    color: Colors.indigo),
               ),
               SizedBox(
                 height: 20,
@@ -90,7 +90,7 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
                   labelText: 'Promotor Name',
                   prefixIcon: Icon(
                     Icons.person,
-                    color: Colors.red[900],
+                    color: Colors.indigo,
                   ),
                 ),
                 validator: (String value) {
@@ -108,7 +108,7 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
                   labelText: 'Email',
                   prefixIcon: Icon(
                     Icons.email,
-                    color: Colors.red[900],
+                    color: Colors.indigo,
                   ),
                 ),
                 validator: (String value) {
@@ -120,12 +120,13 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
                 height: 5,
               ),
               TextFormField(
+                keyboardType: TextInputType.visiblePassword,
                 controller: _passwordController,
                 decoration: InputDecoration(
                   labelText: 'Password',
                   prefixIcon: Icon(
                     Icons.lock,
-                    color: Colors.red[900],
+                    color: Colors.indigo,
                   ),
                 ),
                 validator: (String value) {
@@ -167,11 +168,10 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
                 padding: const EdgeInsets.only(top: 16.0),
                 alignment: Alignment.center,
                 child: MaterialButton(
-                  color: Colors.grey[200],
                   child: Text(
                     "Sign In",
                     style: TextStyle(
-                        color: Colors.red[900],
+                        color: Colors.indigo,
                         fontWeight: FontWeight.bold,
                         fontSize: 16),
                   ),
@@ -179,7 +179,7 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
                   minWidth: 140,
                   shape: RoundedRectangleBorder(
                       side: BorderSide(
-                          color: Colors.red[900],
+                          color: Colors.indigo,
                           width: 1,
                           style: BorderStyle.solid),
                       borderRadius: BorderRadius.circular(40.0)),
@@ -228,7 +228,10 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
                       controller: _emailController,
                       decoration: const InputDecoration(
                         labelText: 'Reset password',
-                        prefixIcon: Icon(Icons.email),
+                        prefixIcon: Icon(
+                          Icons.email,
+                          color: Colors.indigo,
+                        ),
                       ),
                       validator: (String value) {
                         if (value.isEmpty) return 'Please enter some text';
